@@ -42,28 +42,72 @@ fn first_word(s: &str) -> &str {
 
 fn main() {
 
-    let v = vec![1, 2, 3, 4, 5];
-    let a = &v[0];
+    let v = vec![1,2,3,4,5];
 
-    let third: Option<&i32> = v.get(2);
+    let does_not_exist: &i32 = &v[1];
 
-    println!("{}", a);
-    println!("{}", v[1]);
-
-
-
-    let s = "sdfasd".to_string();
-
-    let ss = &s;
-
-    let s12 = &s[..];
+    println!("{:p}", does_not_exist);
+    println!("{}", does_not_exist);
+    println!("{:p}", &v[1]);
+    println!("{:b}", &v[1]);
 
 
-    let s:u8 = 1;
+    // //let v: Vec<i32>  = Vec::new();
+    //
+    // fn foo(v1: &Vec<i32>, v2: &Vec<i32>) -> i32 {
+    //     let s1 = sum_vec(v1);
+    //     let s2 = sum_vec(v2);
+    //
+    //     s1 + s2
+    // }
+    //
+    // fn sum_vec(v: &Vec<i32>) -> i32 {
+    //     v.iter().fold(0, |a, &b| a + b)
+    // }
+    //
+    // let v1 = vec![1, 2, 3];
+    // let v2 = vec![4, 5, 6];
+    //
+    // let v3 = sum_vec(&v1);
+    //
+    // let answer = foo(&v1, &v2);
+    //
+    // println!("{}", answer);
 
-    let s = "강용";
+    // println!("{:?}, {:?}, {}", v3, v4, answer);
+    //
+    // println!("{:?}", v1);
 
-    println!("{}", (&s));
+    // let v = vec![1,2,3,4,5];
+    //
+    // let third = &v[2];
+    // println!("{}", third);
+    // println!("{:?}", v);
+
+
+    //
+    // let v = vec![1, 2, 3, 4, 5];
+    // let a = &v[0];
+    //
+    // let third: Option<&i32> = v.get(2);
+    //
+    // println!("{}", a);
+    // println!("{}", v[1]);
+    //
+    //
+    //
+    // let s = "sdfasd".to_string();
+    //
+    // let ss = &s;
+    //
+    // let s12 = &s[..];
+    //
+    //
+    // let s:u8 = 1;
+    //
+    // let s = "강용";
+    //
+    // println!("{}", (&s));
 
 
 
