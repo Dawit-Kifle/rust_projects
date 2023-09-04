@@ -39,17 +39,45 @@ fn first_word(s: &str) -> &str {
 }
 
 
+fn practice_option(num: i32) -> Option<i32> {
+    if num == 1 {
+        None
+    }
+    else {
+        Some(32)
+    }
+}
 
 fn main() {
 
+    let mut x: Option<i32> = None;
+
+    x = Some(32);
+
+    println!("{:?}", x);
+
+    // assert_eq!(x.is_some(), false);
+
+    let answer= practice_option(32);
+
+    println!("{:?}", answer);
+
+
+
     let v = vec![1,2,3,4,5];
 
-    let does_not_exist: &i32 = &v[1];
+    // let does_not_exist: &i32 = &v[100];
+    let does_exist: Option<&i32> = v.get(100);
 
-    println!("{:p}", does_not_exist);
-    println!("{}", does_not_exist);
-    println!("{:p}", &v[1]);
-    println!("{:b}", &v[1]);
+    //println!("{}", does_not_exist);
+    // println!("{:?}", None);
+
+
+
+    // println!("{:p}", does_not_exist);
+    // println!("{}", does_not_exist);
+    // println!("{:p}", &v[1]);
+    // println!("{}", &v[1]);
 
 
     // //let v: Vec<i32>  = Vec::new();
