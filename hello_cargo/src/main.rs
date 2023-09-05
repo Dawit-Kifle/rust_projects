@@ -1,5 +1,7 @@
 #![allow(unused)]
 
+mod lib;
+
 use std::borrow::Borrow;
 use std::io;
 use std::ptr;
@@ -50,24 +52,46 @@ fn practice_option(num: i32) -> Option<i32> {
 
 fn main() {
 
-    let mut x: Option<i32> = None;
+    let mut v = vec![1,2,3,4,5,6];
 
-    x = Some(32);
+    let first: &i32 = &v[0];
 
-    println!("{:?}", x);
+    println!("{}", first);
 
-    // assert_eq!(x.is_some(), false);
+    // v.push(7);
 
-    let answer= practice_option(32);
+    println!("The first element is : {first}");
 
-    println!("{:?}", answer);
-
-
-
-    let v = vec![1,2,3,4,5];
-
-    // let does_not_exist: &i32 = &v[100];
-    let does_exist: Option<&i32> = v.get(100);
+    // Option 열거형은 값이 있거나 없음을 나타낸다.
+    // let x: Option<&str> = Some("hello");
+    // let x: Option<i32> = None;
+    //
+    // println!("{:?}", x);
+    //
+    // match x {
+    //     i32 => println!("32"),
+    //     Option => println!("option"),
+    //     None => println!("10"),
+    // }
+    //
+    //
+    //
+    // let mut x: Option<i32> = None;
+    //
+    // x = Some(32);
+    //
+    // println!("{:?}", x);
+    //
+    // // assert_eq!(x.is_some(), false);
+    //
+    // let answer= practice_option(32);
+    //
+    // println!("{:?}", answer);
+    //
+    // let v = vec![1,2,3,4,5];
+    //
+    // // let does_not_exist: &i32 = &v[100];
+    // let does_exist: Option<&i32> = v.get(100);
 
     //println!("{}", does_not_exist);
     // println!("{:?}", None);
