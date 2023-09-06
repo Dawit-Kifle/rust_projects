@@ -1,6 +1,6 @@
 #![allow(unused)]
 
-mod lib;
+// mod lib;
 
 use std::borrow::Borrow;
 use std::io;
@@ -44,23 +44,50 @@ fn first_word(s: &str) -> &str {
 fn practice_option(num: i32) -> Option<i32> {
     if num == 1 {
         None
-    }
-    else {
+    } else {
         Some(32)
     }
 }
 
 fn main() {
 
-    let mut v = vec![1,2,3,4,5,6];
+    let v = vec![1,2,3,4,5];
+    for i in &v {
+        println!("{}", i);
+    }
 
-    let first: &i32 = &v[0];
+    println!("{:?}", v);
 
-    println!("{}", first);
+    let mut v = vec![1,2,3,4,5];
 
-    // v.push(7);
+    for i in &mut v {
+        *i += 20;
+    }
 
-    println!("The first element is : {first}");
+    println!("{:?}", v);
+
+    // let mut v = vec![1,2,3,4,5];
+    //
+    // let third: &i32 = &v[3];
+    //
+    // v.push(6);
+    //
+    // println!("{:?}", v);
+
+    // {
+    //     let v = vec![1, 2, 3, 4, 54];
+    // }
+    //
+    //
+    // let mut v = vec![1, 2, 3, 4, 5, 6];
+    //
+    // let first: &i32 = &v[0];
+    //
+    // println!("{}", first);
+    //
+    // // v.push(7);
+    //
+    // println!("The first element is : {first}");
 
     // Option 열거형은 값이 있거나 없음을 나타낸다.
     // let x: Option<&str> = Some("hello");
@@ -95,7 +122,6 @@ fn main() {
 
     //println!("{}", does_not_exist);
     // println!("{:?}", None);
-
 
 
     // println!("{:p}", does_not_exist);
@@ -162,7 +188,6 @@ fn main() {
     // println!("{}", (&s));
 
 
-
     // let mut s1 = String::from("hellow");
     // let s2 = String::from("world");
     //
@@ -172,8 +197,6 @@ fn main() {
     // let s3 = s1 + a;
     //
     // println!("{s3}");
-
-
 
 
     let mut s1 = String::from("foo");
@@ -187,8 +210,6 @@ fn main() {
     let s = "initial contents".to_string();
 
     let s = String::from("initial contents");
-
-
 
 
     // Recall that we talked about string liters being stored inside the binary. Now that we know about slices,
