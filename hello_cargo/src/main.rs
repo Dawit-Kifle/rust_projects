@@ -3,7 +3,7 @@
 // mod lib;
 
 use std::borrow::Borrow;
-use std::io;
+use std::{io, ops};
 use std::ops::Add;
 use std::ptr;
 
@@ -54,7 +54,7 @@ fn to_string_(s: &str) -> String {
     String::from(s)
 }
 
-
+use ops::Range;
 
 fn main() {
 
@@ -66,23 +66,64 @@ fn main() {
     // mut이면 상관이 없지만 const ptr인 경우에는 옮긴 주소로 변경해줄 수 없다.!!!!!
     // 위의 내용이 가장 핵심적인 부분
 
-    let s1 = String::from("heello");
+    //Rather than indexing using [] with a single number, you can use [] with a range to create a string slice
+    // containing particualr bytes
 
-    let bs = s1.as_bytes();
+    fn first_word(s: &String) -> &str {
 
-    let bb = format!("{}", bs[0]);
+        let bytes = s.as_bytes();
 
-    println!("{bb}");
+        for (i, &b) in bytes.iter().enumerate(){
+            if b == b' '{
+                return &s[0..i];
+            }
+        }
 
-    let h = s1.chars();
-
-    println!("{:?}", h);
-
-    let s11 = String::from("ㄱa");
-    println!("{}", s11.len());
-    for i in s11.into_bytes() {
-        print!("{} ", i);
+        &s[..]
     }
+
+    let s = String::from("hello- world:");
+
+    println!("{}", first_word(&s));
+
+    // let index = Range {start: 1, end: 34 };
+
+
+
+
+    let hello = &s[0..5];
+    let world = &s[6..11];
+
+    // println!("{}", &h);
+
+    {
+        let h = String::from("hello");
+        let mut s:String = String::from("world");
+        s.push_str(h.as_str());
+        println!("{}", s);
+
+    }
+
+    // println!("{}", h);
+    // println!("{}", h);
+
+    // let s1 = String::from("heello");
+    //
+    // let bs = s1.as_bytes();
+    //
+    // let bb = format!("{}", bs[0]);
+    //
+    // println!("{bb}");
+    //
+    // let h = s1.chars();
+    //
+    // println!("{:?}", h);
+    //
+    // let s11 = String::from("ㄱa");
+    // println!("{}", s11.len());
+    // for i in s11.into_bytes() {
+    //     print!("{} ", i);
+    // }
 
     // println!("{:?}", s11.into_bytes());
 
