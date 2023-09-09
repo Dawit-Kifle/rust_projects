@@ -4,6 +4,7 @@
 
 use std::borrow::Borrow;
 use std::io;
+use std::ops::Add;
 use std::ptr;
 
 const VERSION: &str = "1.0.0";
@@ -49,22 +50,84 @@ fn practice_option(num: i32) -> Option<i32> {
     }
 }
 
+fn to_string_(s: &str) -> String {
+    String::from(s)
+}
+
+
+
 fn main() {
 
-    let v = vec![1,2,3,4,5];
-    for i in &v {
-        println!("{}", i);
-    }
+    // 1. vector 자료구조는 힙메모리를 사용한다.
+    // 2. 벡터는 고정된 메모리 주소 크기만큼 사용하고 메모리 사이즈를 넘어서 사용하게 되면
+    // 돟적으로 할당할 수 있는 메모리 주소의 크기를 늘리는 형태의 자료조구이다.
+    // 3. 이 과정에서(메모리 주소의 크기를 늘려야 할 때) 메모리 전체를 새로운 주소 공간(?!)으로 옮긴다.
+    // 새로운 메모리 주소 공간으로 이동(move)하게 된다면 만약 벡터의 주소를 가지고 있는 기존의 다른 변수들이
+    // mut이면 상관이 없지만 const ptr인 경우에는 옮긴 주소로 변경해줄 수 없다.!!!!!
+    // 위의 내용이 가장 핵심적인 부분
 
-    println!("{:?}", v);
 
-    let mut v = vec![1,2,3,4,5];
 
-    for i in &mut v {
-        *i += 20;
-    }
 
-    println!("{:?}", v);
+
+
+    // let s1 = String::from("helo");
+    // let s2 = String::from("world");
+    //
+    // // 잘 생각해보자
+    // // add는 String s1(not reference)에 s2(&str / reference임)를 push하고 바로 push된 s1을 반환한 String이다.
+    // // 그렇다면 the s1(not reference)은 ownership을 반환해서 자연스럽게 메모리 할당이 해제될 것이다.
+    // let s3 = s1.clone().add(s2.as_str());
+    //
+    // let s4 = format!("{s1}-{s2}-{s3}");
+    //
+    // println!("{s4}");
+
+    // let t = s2 + "-" + &s1 + "-" + &s3;
+
+    // let mut s = String::from("hello");
+    //
+    // s.push_str(" sdf");
+    //
+    // println!("{s}");
+
+
+
+
+    // string slices는 coded 기계어로 변환된 char들의 주소값의 연속된 형태이다.
+    // let s = "string liter, string slice";
+    //
+    // let s = "hello";
+    // let ss = "world";
+    //
+    // for a in ss.chars() {
+    //     println!("{}", a);
+    // }
+    // println!("{}", s[1]);
+
+    //
+    // println!("{}", s.to_string());
+    //
+    // println!("{}", to_string_("this is string listeral"));
+
+
+
+
+
+    // let v = vec![1,2,3,4,5];
+    // for i in &v {
+    //     println!("{}", i);
+    // }
+    //
+    // println!("{:?}", v);
+    //
+    // let mut v = vec![1,2,3,4,5];
+    //
+    // for i in &mut v {
+    //     *i += 20;
+    // }
+    //
+    // println!("{:?}", v);
 
     // let mut v = vec![1,2,3,4,5];
     //
@@ -199,32 +262,32 @@ fn main() {
     // println!("{s3}");
 
 
-    let mut s1 = String::from("foo");
-    let s2 = "bar";
-    s1.push_str(s2);
-    println!("s2 is {s2}");
-
-    let data = "initial contents";
-    let s = data.to_string();
-
-    let s = "initial contents".to_string();
-
-    let s = String::from("initial contents");
-
-
-    // Recall that we talked about string liters being stored inside the binary. Now that we know about slices,
-    // we can properly understand string literals;
-
-    let s = "Hello world";
-
-    //the type of s here is &str: it's a slice pointing to that specific point of the binary.
-    // This is also why string literals are immutable; &str is an immutale reference.
-
-
-    let my_string = String::from("hello world");
-
-    // first)wird works on slices of String s, whether partial of whole
-    let word = first_word(&my_string[..]);
+    // let mut s1 = String::from("foo");
+    // let s2 = "bar";
+    // s1.push_str(s2);
+    // println!("s2 is {s2}");
+    //
+    // let data = "initial contents";
+    // let s = data.to_string();
+    //
+    // let s = "initial contents".to_string();
+    //
+    // let s = String::from("initial contents");
+    //
+    //
+    // // Recall that we talked about string liters being stored inside the binary. Now that we know about slices,
+    // // we can properly understand string literals;
+    //
+    // let s = "Hello world";
+    //
+    // //the type of s here is &str: it's a slice pointing to that specific point of the binary.
+    // // This is also why string literals are immutable; &str is an immutale reference.
+    //
+    //
+    // let my_string = String::from("hello world");
+    //
+    // // first)wird works on slices of String s, whether partial of whole
+    // let word = first_word(&my_string[..]);
     // let s: String = String::from("hello world");
     // first_word(&s);
     //
