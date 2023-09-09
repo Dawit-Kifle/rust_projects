@@ -66,6 +66,16 @@ fn main() {
     // mut이면 상관이 없지만 const ptr인 경우에는 옮긴 주소로 변경해줄 수 없다.!!!!!
     // 위의 내용이 가장 핵심적인 부분
 
+    let s1 = String::from("heello");
+    let bs = s1.as_bytes();
+
+    let bb = format!("{}", bs[0]);
+
+    println!("{bb}");
+
+    let h = s1.chars();
+
+    println!("{:?}", h);
 
 
 
