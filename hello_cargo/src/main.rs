@@ -67,6 +67,7 @@ fn main() {
     // 위의 내용이 가장 핵심적인 부분
 
     let s1 = String::from("heello");
+
     let bs = s1.as_bytes();
 
     let bb = format!("{}", bs[0]);
@@ -77,6 +78,13 @@ fn main() {
 
     println!("{:?}", h);
 
+    let s11 = String::from("ㄱa");
+    println!("{}", s11.len());
+    for i in s11.into_bytes() {
+        print!("{} ", i);
+    }
+
+    // println!("{:?}", s11.into_bytes());
 
 
 
