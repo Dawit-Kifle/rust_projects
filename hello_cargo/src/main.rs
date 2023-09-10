@@ -9,15 +9,6 @@ use std::ptr;
 
 const VERSION: &str = "1.0.0";
 
-fn calculate_length(s: &String) -> (String, usize) {
-    // These ampersands represent references, and they allow you to refer to some value without taking ownership of it. Figure 4-5 depicts this concept.
-    // references를 사용한다는 것은 ownershiop을 이전하지 않고 사용하는 것을 의미하는 것 같다.
-    // 그래서 main 함수에서 재사용 가능
-    let length = s.len(); // len() returns the length of a String
-
-    (s.to_string(), length)
-}
-
 fn change(s: &mut String) -> String {
     s.push_str(",,,,,,,,,,, world");
     s.to_string()
@@ -56,6 +47,7 @@ fn to_string_(s: &str) -> String {
 
 use ops::Range;
 
+
 fn main() {
 
     // 1. vector 자료구조는 힙메모리를 사용한다.
@@ -68,6 +60,90 @@ fn main() {
 
     //Rather than indexing using [] with a single number, you can use [] with a range to create a string slice
     // containing particualr bytes
+
+
+    // 1. 벡터의 자료구조는 어떻게 생겨먹었냐?
+    // 2. slice 타입에 대해서 배움
+    // 3. str과 reference &str이 뭔 차이가 있는지
+    // 가장 핵심적인 부분은 결국 reference를 어떻게 다루고 어떻게 러스트에서 바라보고 있는건가를 이해하는 점
+
+    fn dangle() -> String { // dangle returns a reference to a String
+
+        "asd".to_string()
+    }
+
+    let s: String = String::from("hellsso"); // s is a new String
+
+    println!("{}", s.to_string());
+
+    println!("{:p}", &s);
+
+    println!("=========================================");
+    println!("\n");
+
+    // let reference = dangle();
+    //
+    // println!("{reference}");
+
+
+
+
+
+
+    fn calculate_length(s: &String) -> usize {
+        // These ampersands represent references, and they allow you to refer to some value without taking ownership of it. Figure 4-5 depicts this concept.
+        // references를 사용한다는 것은 ownershiop을 이전하지 않고 사용하는 것을 의미하는 것 같다.
+        // 그래서 main 함수에서 재사용 가능
+        let length = s.len(); // len() returns the length of a String
+
+        length
+    }
+
+    let mut s: String = String::from("hee");
+
+    let r1 = &s;
+    let r2 = &s;
+
+    // The scopes of the immutable references r1 and r2 end after the println! where they are last used
+    println!("{}, {}", r1, r2);
+
+    // 하고자 하는 말은 이와 같은 것 같다.
+    // mutable reference가 있는 이하의 코드 section부터는 mutable 변수들이 쓰이자 않으면 된다.
+    let r3 = &mut s;
+
+    println!("{r3}");
+
+    // 핵심적인 문제는 immutable하게 참조하고 있는 r1, r2가 만약에
+    // mutable하게 바뀔 수 있는 r3에서 실제로 바뀌게 된다면 문제가 발생한다.
+
+
+
+
+    // mutable variable의 reference룰 여러개 만들 때의 문제는
+    // 하나의 변수에서의 수정에 대한 synchronize가 되지 않는 문제를 야기하기 때문에
+    // 개발자가 이런 부분을 훌륭하게 통제할 수 있다면 문제가 되지 않겠지만 러스트에서는 이런 상황을 미연에 방지하고자 하는 것 같다.
+
+    // but immutable한 reference는 여러개를 만들어도 상관없다. 어차피 reference가 가리키는 real value의 값이 변하지 않기 때문
+
+    // {
+    //     let r1 = &mut s;
+    // }
+    //
+    // let r2 = &mut s;
+    //
+    //
+    // println!("{}, {}", 1, r2);
+
+    // let len:usize = calculate_length(&s1);
+    //
+    // println!("The length of '{}' is {}.", s1, len);
+
+
+
+
+
+
+
 
     fn first_word(s: &String) -> &str {
 
