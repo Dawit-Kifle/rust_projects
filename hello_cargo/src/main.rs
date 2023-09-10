@@ -46,7 +46,7 @@ fn to_string_(s: &str) -> String {
 }
 
 use ops::Range;
-
+use core::alloc;
 
 fn main() {
 
@@ -67,51 +67,103 @@ fn main() {
     // 3. str과 reference &str이 뭔 차이가 있는지
     // 가장 핵심적인 부분은 결국 reference를 어떻게 다루고 어떻게 러스트에서 바라보고 있는건가를 이해하는 점
 
-    fn dangle() -> String { // dangle returns a reference to a String
+    // dangle means point the invaild pointer that has already been deallocated
 
-        "asd".to_string()
+    let s = String::from("dsf");
+
+    // s = String::from("sdf");
+
+    println!("{s}");
+
+
+
+    struct User {
+        name: String,
+        age: u32,
+        email: Option<String>
     }
 
-    let s: String = String::from("hellsso"); // s is a new String
+    let user1 = User {
+        name: "강용수".to_string(),
+        age: 33,
+        email: None
+    };
 
-    println!("{}", s.to_string());
+    println!("{}", user1.name);
 
-    println!("{:p}", &s);
 
-    println!("=========================================");
-    println!("\n");
 
-    // let reference = dangle();
+    let s= String::from("hellsso"); // s is a new String
+
+
+    // u8 type의 벡터
+    let v: Vec<u8> = Vec::new();
+    let v = vec![13,4,3,3,];
+
+    println!("{:?}", v[0]);
+
+    let num = v.len();
+    let pp = v.as_ptr();
+
+    unsafe {
+        println!("{:p}", pp.add(2));
+
+    }
+
+    // println!("{}", v.capacity());
+    // println!("{num}");
+
+    // fn dangle() -> String { // dangle returns a reference to a String
     //
-    // println!("{reference}");
+    //     "asd".to_string()
+    // }
+    //
+    //
+    //
 
-
-
-
-
-
-    fn calculate_length(s: &String) -> usize {
-        // These ampersands represent references, and they allow you to refer to some value without taking ownership of it. Figure 4-5 depicts this concept.
-        // references를 사용한다는 것은 ownershiop을 이전하지 않고 사용하는 것을 의미하는 것 같다.
-        // 그래서 main 함수에서 재사용 가능
-        let length = s.len(); // len() returns the length of a String
-
-        length
-    }
-
-    let mut s: String = String::from("hee");
-
-    let r1 = &s;
-    let r2 = &s;
-
-    // The scopes of the immutable references r1 and r2 end after the println! where they are last used
-    println!("{}, {}", r1, r2);
-
-    // 하고자 하는 말은 이와 같은 것 같다.
-    // mutable reference가 있는 이하의 코드 section부터는 mutable 변수들이 쓰이자 않으면 된다.
-    let r3 = &mut s;
-
-    println!("{r3}");
+    //
+    // // s = String::from("hello")의 memory address 그자체
+    //
+    // // &s는 String::from("hello")의 memory address를 담고 있는 stack 변수 s 그자체의 memory address
+    //
+    // println!("{}", s.to_string());
+    //
+    // println!("{:p}", &s);
+    //
+    // println!("=========================================");
+    // println!("\n");
+    //
+    // // let reference = dangle();
+    // //
+    // // println!("{reference}");
+    //
+    //
+    //
+    //
+    //
+    //
+    // fn calculate_length(s: &String) -> usize {
+    //     // These ampersands represent references, and they allow you to refer to some value without taking ownership of it. Figure 4-5 depicts this concept.
+    //     // references를 사용한다는 것은 ownershiop을 이전하지 않고 사용하는 것을 의미하는 것 같다.
+    //     // 그래서 main 함수에서 재사용 가능
+    //     let length = s.len(); // len() returns the length of a String
+    //
+    //     length
+    // }
+    //
+    // let mut s: String = String::from("hee");
+    //
+    // let r1 = &s;
+    // let r2 = &s;
+    //
+    // // The scopes of the immutable references r1 and r2 end after the println! where they are last used
+    // println!("{}, {}", r1, r2);
+    //
+    // // 하고자 하는 말은 이와 같은 것 같다.
+    // // mutable reference가 있는 이하의 코드 section부터는 mutable 변수들이 쓰이자 않으면 된다.
+    // let r3 = &mut s;
+    //
+    // println!("{r3}");
 
     // 핵심적인 문제는 immutable하게 참조하고 있는 r1, r2가 만약에
     // mutable하게 바뀔 수 있는 r3에서 실제로 바뀌게 된다면 문제가 발생한다.
@@ -143,42 +195,42 @@ fn main() {
 
 
 
-
-
-    fn first_word(s: &String) -> &str {
-
-        let bytes = s.as_bytes();
-
-        for (i, &b) in bytes.iter().enumerate(){
-            if b == b' '{
-                return &s[0..i];
-            }
-        }
-
-        &s[..]
-    }
-
-    let s = String::from("hello- world:");
-
-    println!("{}", first_word(&s));
-
-    // let index = Range {start: 1, end: 34 };
-
-
-
-
-    let hello = &s[0..5];
-    let world = &s[6..11];
+    //
+    //
+    // fn first_word(s: &String) -> &str {
+    //
+    //     let bytes = s.as_bytes();
+    //
+    //     for (i, &b) in bytes.iter().enumerate(){
+    //         if b == b' '{
+    //             return &s[0..i];
+    //         }
+    //     }
+    //
+    //     &s[..]
+    // }
+    //
+    // let s = String::from("hello- world:");
+    //
+    // println!("{}", first_word(&s));
+    //
+    // // let index = Range {start: 1, end: 34 };
+    //
+    //
+    //
+    //
+    // let hello = &s[0..5];
+    // let world = &s[6..11];
 
     // println!("{}", &h);
 
-    {
-        let h = String::from("hello");
-        let mut s:String = String::from("world");
-        s.push_str(h.as_str());
-        println!("{}", s);
-
-    }
+    // {
+    //     let h = String::from("hello");
+    //     let mut s:String = String::from("world");
+    //     s.push_str(h.as_str());
+    //     println!("{}", s);
+    //
+    // }
 
     // println!("{}", h);
     // println!("{}", h);
