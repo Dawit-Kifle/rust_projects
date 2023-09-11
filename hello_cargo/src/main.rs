@@ -68,6 +68,23 @@ fn main() {
     // 가장 핵심적인 부분은 결국 reference를 어떻게 다루고 어떻게 러스트에서 바라보고 있는건가를 이해하는 점
 
     // dangle means point the invaild pointer that has already been deallocated
+    unsafe {
+        let x = 5;
+        println!("{:p}", &x);
+        let raw: *const i32 = &x;
+        println!("{:p}", raw);
+
+        let y = x;
+        println!("{:p}", &y);
+
+    }
+
+    // this is indeed what is happening, because integers are simple values with a known, fixed size,
+    // and these two 5 values are pushed onto the stack.
+
+    // but let x = String::from("hellow"); statement는 다르다.
+    // 왜냐하면 String은 heap memory에 올라가기 때문에 그리고 String은 flexible한 size를 가지고 있기 때문이다.
+
 
     let s = String::from("dsf");
 
@@ -80,16 +97,37 @@ fn main() {
     struct User {
         name: String,
         age: u32,
-        email: Option<String>
+        email: String
     }
+
+    let mut user2 = User {
+        name: "강정수".to_string(),
+        age: 29,
+        email: "kysdf@gmail.com".to_string()
+    };
+
+    user2.email = "aaaaa@naver.com".to_string();
+
+    println!("{:?}", user2.email);
+
 
     let user1 = User {
         name: "강용수".to_string(),
         age: 33,
-        email: None
+        email: String::from("asdf")
     };
 
     println!("{}", user1.name);
+
+    fn build_user(email: String, name: String) -> User {
+        // parameter name과 struct의 filed name이 같을 때는,
+        // 할당하는 과정 생략 가능
+        User {
+            email,
+            name,
+            age: 32
+        }
+    }
 
 
 
