@@ -67,10 +67,12 @@ fn main() {
     // 3. str과 reference &str이 뭔 차이가 있는지
     // 가장 핵심적인 부분은 결국 reference를 어떻게 다루고 어떻게 러스트에서 바라보고 있는건가를 이해하는 점
 
-    // dangle means point the invaild pointer that has already been deallocated
+    // because integers are simple values with a known, fixed size, and these two 5 values
+    // are pushed onto the stack.
+
     unsafe {
         let x = 5;
-        println!("{:p}", &x);
+        println!("{:p}", x);
         let raw: *const i32 = &x;
         println!("{:p}", raw);
 
