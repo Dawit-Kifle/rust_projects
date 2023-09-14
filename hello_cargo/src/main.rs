@@ -70,16 +70,43 @@ fn main() {
     // because integers are simple values with a known, fixed size, and these two 5 values
     // are pushed onto the stack.
 
-    unsafe {
-        let x = 5;
-        println!("{:p}", x);
-        let raw: *const i32 = &x;
-        println!("{:p}", raw);
 
-        let y = x;
-        println!("{:p}", &y);
+    // str -> string literals -> read-only data segment
+    // String -> heap allocated string -> heap memory
+    //
+    // String -> heap memory and Vector<u8> 따라서
+    // buffer, capacity, length를 가지고 있다.
 
-    }
+    // but literal string은 buffer, len을 가지고 있다.
+
+    // A reference is a nonowning pointer type that references another value in memory.
+    // References are created using the borrow-operator &.
+    //
+
+    let x = 10; // own 10
+
+
+
+
+
+    let story = "Once upon a time...";
+
+    let ptr = story.as_ptr();
+    let len = story.len();
+
+    println!("{:p}, {}", ptr, len);
+    println!("{:p}", story);
+
+    // unsafe {
+    //     let x = 5;
+    //     println!("{:p}", x);
+    //     let raw: *const i32 = &x;
+    //     println!("{:p}", raw);
+    //
+    //     let y = x;
+    //     println!("{:p}", &y);
+    //
+    // }
 
     // this is indeed what is happening, because integers are simple values with a known, fixed size,
     // and these two 5 values are pushed onto the stack.
@@ -88,67 +115,67 @@ fn main() {
     // 왜냐하면 String은 heap memory에 올라가기 때문에 그리고 String은 flexible한 size를 가지고 있기 때문이다.
 
 
-    let s = String::from("dsf");
-
-    // s = String::from("sdf");
-
-    println!("{s}");
-
-
-
-    struct User {
-        name: String,
-        age: u32,
-        email: String
-    }
-
-    let mut user2 = User {
-        name: "강정수".to_string(),
-        age: 29,
-        email: "kysdf@gmail.com".to_string()
-    };
-
-    user2.email = "aaaaa@naver.com".to_string();
-
-    println!("{:?}", user2.email);
-
-
-    let user1 = User {
-        name: "강용수".to_string(),
-        age: 33,
-        email: String::from("asdf")
-    };
-
-    println!("{}", user1.name);
-
-    fn build_user(email: String, name: String) -> User {
-        // parameter name과 struct의 filed name이 같을 때는,
-        // 할당하는 과정 생략 가능
-        User {
-            email,
-            name,
-            age: 32
-        }
-    }
-
-
-
-    let s= String::from("hellsso"); // s is a new String
-
-
-    // u8 type의 벡터
-    let v: Vec<u8> = Vec::new();
-    let v = vec![13,4,3,3,];
-
-    println!("{:?}", v[0]);
-
-    let num = v.len();
-    let pp = v.as_ptr();
-
-    unsafe {
-        println!("{:p}", pp.add(2));
-
-    }
+    // let s = String::from("dsf");
+    //
+    // // s = String::from("sdf");
+    //
+    // println!("{s}");
+    //
+    //
+    //
+    // struct User {
+    //     name: String,
+    //     age: u32,
+    //     email: String
+    // }
+    //
+    // let mut user2 = User {
+    //     name: "강정수".to_string(),
+    //     age: 29,
+    //     email: "kysdf@gmail.com".to_string()
+    // };
+    //
+    // user2.email = "aaaaa@naver.com".to_string();
+    //
+    // println!("{:?}", user2.email);
+    //
+    //
+    // let user1 = User {
+    //     name: "강용수".to_string(),
+    //     age: 33,
+    //     email: String::from("asdf")
+    // };
+    //
+    // println!("{}", user1.name);
+    //
+    // fn build_user(email: String, name: String) -> User {
+    //     // parameter name과 struct의 filed name이 같을 때는,
+    //     // 할당하는 과정 생략 가능
+    //     User {
+    //         email,
+    //         name,
+    //         age: 32
+    //     }
+    // }
+    //
+    //
+    //
+    // let s= String::from("hellsso"); // s is a new String
+    //
+    //
+    // // u8 type의 벡터
+    // let v: Vec<u8> = Vec::new();
+    // let v = vec![13,4,3,3,];
+    //
+    // println!("{:?}", v[0]);
+    //
+    // let num = v.len();
+    // let pp = v.as_ptr();
+    //
+    // unsafe {
+    //     println!("{:p}", pp.add(2));
+    //
+    // }
 
     // println!("{}", v.capacity());
     // println!("{num}");
