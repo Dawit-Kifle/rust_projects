@@ -47,6 +47,7 @@ fn to_string_(s: &str) -> String {
 
 use ops::Range;
 use core::alloc;
+use std::thread::scope;
 
 fn main() {
 
@@ -80,22 +81,103 @@ fn main() {
     // but literal string은 buffer, len을 가지고 있다.
 
     // A reference is a nonowning pointer type that references another value in memory.
-    // References are created using the borrow-operator &.
+    // &
+
+    // string slices is a reference to a substring of that data and therefore also  points at the memory on the heap
+    // string slices는 heap memory에 이미 할당된 Vec의 reference를 가지고 오는 것이기 때문에 반드시 length를 명시하고 가져와야 한다.
+
+    // The boxed array has now been bound to both a and b. by our almost correct principle
+    // rust would try to free the box's heap memory twice on behalf of both variables.
+    // That's undefined behavior too.
+    // To avoid this situation, we finally arrive at ownership
+    // When a is bound to Box::new we say that a owns the box. the statement let b = a moves ownership of the box
+    // from a to b.
+
+    // fn main() {
     //
+    //     let first = String::from("Ferris"); first is stack memory and String::from("Ferris") is converted string literals to heap memory
+    //     and first own the "Ferris" string memory address
+    //
+    //     new stack frame add_suffix is created in stack memory
+    //     let full = add_suffix(first);
+    //     full owns the "Ferris Jr." string memory address
+    //     println!("{full}");
+    // }
+    //               parameter name is defined mutably and has String. it means name own the String memory address
+    // fn add_suffix(mut name: String) -> String {
+    //
+    //     name.push_str(" Jr.");
+    //     name
+    //     then name owns the "Ferris Jr." string memory address
+    //     and when add_suffix stack frame is deallocated on stack
+    //     the name variable is deallocated too on stack so name variable is dropped
+    // }
+    let mut first = String::from("Ferris");
+    first.as_ptr();
+    *const u8;
+    *mut u8;
 
-    let x = 10; // own 10
+    println!("{first}");
+    first = String::from("Ferris Jr.");
+    println!("{first}");
+    // let full = add_suffix(first);
+    // println!("{full} ");
+    //
+    // fn add_suffix(mut name: String) -> String {
+    //     name.push_str(" Jr.");
+    //     name
+    // }
+    //
+    // All heap data must be owned by exactly one variable.
+    // Rust deallocates heap data once its owner goes out of scope
+    // Ownership can be transferred by moves, which happen on assignment
+    // Heap data can only be accessed through its current owner
 
-
-
-
-
-    let story = "Once upon a time...";
-
-    let ptr = story.as_ptr();
-    let len = story.len();
-
-    println!("{:p}, {}", ptr, len);
-    println!("{:p}", story);
+    // let s2: i32;
+    // let s = String::from("hello");
+    //
+    //
+    // // heap memory
+    // // Ferris Jr.
+    //
+    //
+    //
+    //
+    //
+    //
+    // let mut a = 32;
+    // // !!!값 복사가 일어남!!! 값 복사가 일어남 값 복사가 일어남 값 복사가 일어남
+    // let b = a;
+    //
+    // println!("{}", b);
+    //
+    // a = 11;
+    //
+    // println!("{}", b);
+    //
+    //
+    // let my_name = &"Pascal Precht".to_string();
+    //
+    // println!("{}", my_name);
+    // // 주소값을 그대로 사용할순 없다. 주소값을 가지고 와서 다시 slice 해서 사용해야 한다.
+    // let last_name = &my_name[7..];
+    //
+    // let s = "sdfsdf";
+    //
+    //
+    //
+    // // & reference는 결국 시작 주소값을 가지고 와서 stack frame에 저장하는 것이다.
+    //
+    //
+    //
+    //
+    // let story = "Once upon a time...";
+    //
+    // let ptr = story.as_ptr();
+    // let len = story.len();
+    //
+    // println!("{:p}, {}", ptr, len);
+    // println!("{:p}", story);
 
     // unsafe {
     //     let x = 5;
