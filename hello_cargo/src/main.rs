@@ -112,14 +112,26 @@ fn main() {
     //     and when add_suffix stack frame is deallocated on stack
     //     the name variable is deallocated too on stack so name variable is dropped
     // }
-    let mut first = String::from("Ferris");
-    first.as_ptr();
-    *const u8;
-    *mut u8;
 
-    println!("{first}");
-    first = String::from("Ferris Jr.");
-    println!("{first}");
+    unsafe {
+        let my_num: Box<i32> = Box::new(10);
+        let my_num_ptr = my_num;
+
+        println!("{:?}", my_num_ptr);
+        println!("{:?}", *my_num_ptr);
+        println!("{}", my_num);
+    }
+
+
+
+
+    // let mut first = String::from("Ferris");
+    // first.as_ptr();
+    //
+    // println!("{first}");
+    // first = String::from("Ferris Jr.");
+    // println!("{first}");
+
     // let full = add_suffix(first);
     // println!("{full} ");
     //
