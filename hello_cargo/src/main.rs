@@ -47,9 +47,54 @@ fn to_string_(s: &str) -> String {
 
 use ops::Range;
 use core::alloc;
+use std::fmt::format;
 use std::thread::scope;
 
 fn main() {
+
+    let m1 = String::from("Hello");
+    let m2 = String::from("World");
+
+    let (m1_, m2_) = greet(m1, m2);
+
+    let s = format!("{} {}", m1_, m2_);
+    fn greet(g1:String, g2:String) -> (String, String){
+        println!("{} {}", g1, g2);
+        (g1, g2)
+    }
+
+
+
+
+    // let s = String::from("h");
+    //
+    //
+    // let mut s1: String;
+    // // s1 = &s;
+    // // let s2 = String::from("12312321");
+    // // because of this allocation the original String s is dropped
+    // s1 = String::from("12312321");
+    // s1 = String::from("sdfsdfsdfsdfsdf");
+    //
+    // println!("{s1}");
+    // println!("{s}");
+
+
+    // [GUIDELINE] 중요!!!!!!!!!
+    // since the original String isn't saved to a variable anywhere
+    // since the original String isn't saved to a variable anywhere
+    // it would be immediately freed and the reference would be invalid.
+    // it would be immediately freed and the reference would be invalid
+    // If you don't put value into a variable, it gets dropped
+    // If you don't put value into a variable, it gets dropped
+    // But if you put result of to_string into some temprrary variable, you might
+    // But if you put result of to_string into some temporary variable, you might
+    // in your case second error that did_config outlvies that
+    // in your case second error that did_confg
+    // dbg!(temoporary)Simplest solution would be to make did_config a String.
+    // If you don't put value into a variable, it gets dropped
+
+
 
     // 1. vector 자료구조는 힙메모리를 사용한다.
     // 2. 벡터는 고정된 메모리 주소 크기만큼 사용하고 메모리 사이즈를 넘어서 사용하게 되면
@@ -113,14 +158,14 @@ fn main() {
     //     the name variable is deallocated too on stack so name variable is dropped
     // }
 
-    unsafe {
-        let my_num: Box<i32> = Box::new(10);
-        let my_num_ptr = my_num;
-
-        println!("{:?}", my_num_ptr);
-        println!("{:?}", *my_num_ptr);
-        println!("{}", my_num);
-    }
+    // unsafe {
+    //     let my_num: Box<i32> = Box::new(10);
+    //     let my_num_ptr = my_num;
+    //
+    //     println!("{:?}", my_num_ptr);
+    //     println!("{:?}", *my_num_ptr);
+    //     println!("{}", my_num);
+    // }
 
 
 
