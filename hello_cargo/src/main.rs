@@ -4,7 +4,7 @@
 
 use std::borrow::Borrow;
 use std::{io, ops};
-use std::ops::Add;
+use std::ops::{Add, Deref};
 use std::ptr;
 
 const VERSION: &str = "1.0.0";
@@ -49,19 +49,132 @@ use ops::Range;
 use core::alloc;
 use std::fmt::format;
 use std::thread::scope;
+use std::str;
 
 fn main() {
+    // 매개변수로 포인터를 넣어도 여전히 call by value입니다.
+    // 애초에 C는 call by value밖에 지원을하지않습니다.
+    // (한 language에서 call by value , call by reference를 동시에 지원하는것은 불가능합니다)
+    // call by reference처럼 보이는이유는 포인터로 참조를했기 떄문입니다.
+    // 정확히는 포인터 그 자체가 call by value로 복사가됐는데,
+    // 그 복사된포인터는 기존 포인터와 같은 object를 가르키기때문에 값이 변경되는것입니다.(call by reference이기떄문에 값이swap되는것이라고 착각하는일 없으시길 바랍니다.)
+    // 하지만 여기에 더해 rust는 pointer에 대한 소유를 반드시 하나만 가질 수 있게끔 강제하고 있다는 점이 추가된 점이라고 생각해야 한다.
 
-    let m1 = String::from("Hello");
-    let m2 = String::from("World");
+    let s = String::from("Hello");
+    let ln1 = s.len();
 
-    let (m1_, m2_) = greet(m1, m2);
+    let aaaa = &s[1..3];
+    let aaaa11 = &s;
 
-    let s = format!("{} {}", m1_, m2_);
-    fn greet(g1:String, g2:String) -> (String, String){
-        println!("{} {}", g1, g2);
-        (g1, g2)
-    }
+    println!("{}", aaaa);
+    return;
+
+    // let a = *s;
+    let a = &s;
+    let a = &s;
+    println!("{:?}", s);
+    // println!("{:?}", str::len(*s));
+    println!("{:?}", str::len(s.deref()));
+    println!("-=--------------------");
+
+
+    //let ln2 = str::len();
+
+
+    let x = Box::new(-1);
+    let x_abs1 = i32::abs(*x);
+    let x_abs2 = x.abs();
+
+    assert_eq!(x_abs1, x_abs2);
+
+    let r = &x;
+    // double reference means i get real value of heap memory
+    let r_abs1 = i32::abs(**r);// explicit dereference
+    // r 그자체가 stack의 메모리이기 때문에
+    let r_abs2 = r.abs();
+
+    println!("{:p},,,, {:p}", &x, r);
+    println!("{:p}", &*x);
+
+
+
+
+
+    let mut x: Box<i32> = Box::new(1);
+    // call by value
+    // call by value란 매개변수에 값을 넘길 때, 넘기는 값의 메모리 주소가 아닌
+    // 실제 값을 복사해서 넘기는 것을 말한다.
+    // 즉 reference의 value를 stack frame에 직적 copy하는 것을 의미한다.
+    let a = *x;
+
+    *x +=1;
+
+
+    println!("{x}");
+
+    // r1 is pointer of x(heap memory[Box]) in other words
+    // r1 is memory address
+
+    // r1 points to x on the stack
+    // 스택에 있는 주소를 받았다고 생각하면 됨
+    // r1 points to x on the stack
+    // r1 points to x on the stack
+    // r1 points to x on the stack
+    // r1 points to x on the stack
+    // r1 points to x on the stack
+    // r1 points to x on the stack
+    // r1 points to x on the stack
+
+    let r1 = &x;
+    // r1 is heap memory reference and if we wanna get the value of heap memory
+    // ** double deference
+    let b = **r1;
+
+
+    // r2 points to the heap value directly
+    // this means call by value
+    // x가 가리키는 box의 힙 메모리에 있는 value를 현재의 main stack에 복사해온 값
+    let r2 = *x;
+    // x의 deferencing 즉 heap 메모리의 2값을 가리키고 그 2의 메모리& address를 직접 참조하게
+    // 만드는 코드
+    let r2 = &*x;
+
+    println!("{r2}");
+
+    // println!("{r1}, {b}, {r2}, {c}");
+
+
+    // let mut x: i32 = x.deref() + 1;
+    //
+    // fn de(reff: Box<i32>) -> i32 {
+    //
+    //     unsafe {
+    //         *reff + 2
+    //     }
+    // }
+    //
+    // let mut x: Box<i32> = Box::new(1);
+    //
+    // let a = de(x);
+    //
+    //
+    //
+    //
+    // println!("{a}");
+    // //println!("{x}");
+
+    //
+    // let m1 = String::from("Hello");
+    // let m2 = String::from("World");
+    //
+    // // reference를 parameter로 넘긴다는 것은 stack 메
+    // greet(&m1, &m2);
+    //
+    // let s = format!("{} {}", m1, m2);
+    // fn greet(g1: &String, g2: &String) {
+    //     println!("{} {}", g1, g2);
+    //
+    // }
 
 
 
