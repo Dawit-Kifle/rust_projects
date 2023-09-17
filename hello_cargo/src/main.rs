@@ -72,21 +72,31 @@ fn main() {
     // strin literal의 length와 pointer를 가지고 있다.
     // let aa = "sdfsdf";
     // &str은 length를 계산하여 가지고 있는 형태이고
-        // str은 preallocated 영역의 string 그 자체를 가지고 있는 느낌이다.
+    // str은 preallocated 영역의 string 그 자체를 가지고 있는 느낌이다.
+
+    let mut x: &'static [u8] = b"hey";
+
+
+
+
+
+
+
 
     let strings: Vec<String> = vec![];
     let default = String::from("default");
-    let s = first_or(&strins, &default);
 
     // println!("{:?}",strings);
 
-    fn first_or(strings: &Vec<String>, default: &String) -> &String {
-        if strings.len() > 0 {
-            &strings[0]
-        } else {
-            default
-        }
-    }
+    // fn first_or(strings: &Vec<String>, default: &String) -> &String {
+    //
+    //     if strings.len() > 0 {
+    //         &strings[0]
+    //     } else {
+    //         default
+    //     }
+    //
+    // }
 
     return;
 
