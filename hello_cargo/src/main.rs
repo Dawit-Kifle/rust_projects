@@ -64,13 +64,231 @@ fn main() {
     // By deallocating the aliased data, leaving the other variable to point to deallocated memory
     // By mutating the aliased data, invalidating runtime properties expected by the other variable
     // by concurrently mutating the aliased data, causing a data race with nondeterministic behavior for the other variable.
+    // string literals라고 하는 것은
+    // compile time에 모든 string literal를 모으는 과정에서 중복된 string을 제거하고
+    // 재사용 할 리터럴들을 고르고 골라서 preallocated 메모리 상에 할당하고 필요할 때마다 재사용을 하도록 만든다.
+    // 그래서 &str은 preallocated 메모리 상에 존재하는 string literal의 주소이다.
 
-let mut v: Vec<i32> = vec![1, 2, 3];
-let num: &mut i32 = &mut v[2];
+    // strin literal의 length와 pointer를 가지고 있다.
+    // let aa = "sdfsdf";
+    // &str은 length를 계산하여 가지고 있는 형태이고
+    // str은 preallocated 영역의 string 그 자체를 가지고 있는 느낌이다.
 
-println!("Third element is {}", *num);
-println!("Again, the third element is {}", *num);
-v.push(4);
+    // 하지만 string이라는 것은 결국 char[u8]의 array에 불과하고 string은 정확하게
+    // we don't know how many bytes has on compile time
+
+    let mut v = vec![1,2,3]; // length, capacity, pointer
+    // [GUIDELINE] 중요 vec의 element에 대해서 하나의 address의 ownership만 넘길 수 없다.
+    //   이 의미인 것 같다.
+    //   heap의 2의 주소값을 가지고 있는 것이 맞다.
+    let num = &v[1]; // length, pointer
+
+    // [GUIDELINE] 중요 num은 현재 stack 1 메모리를 참조하는 중
+    //  엄밀히 말하면 stack 1의 메모리에
+    //  진짜 중요!!!!!!!!!!!!!!!
+    //     size = 1 + < 4*(index + 1) > 만큼을 stack 1메모리에서 이동을 여하
+    //   2 value를 가지고 있게 될건데 결국에는 stack 메모리를 참조하고 있었지만
+    //   push에 의해서 stack1이 참조하고 있는 heap 메모리의 주소가 변경이 될 때
+    //   num이 가리키던 heap이 변경이 일어나서 undefined behavior가 일어난다.
+
+    let mut v = vec![1,2,3];
+    // heap 메모리의 1-index의 address를 참조하고 있는 중
+    let h = &v[1];
+
+    // [GUIDELINE] 중요 push가 일어났을 때, capacity가 length와 같으면 새로운 space로 이사가고 기존의 주소는
+    //  파기된다. 그렇다면 h는 undefined behavior이 일어나게 된다.
+    v.push(23);
+    println!("{}", *num);
+
+    // println!("{:?}", v);
+
+
+    // let mut s = String::from("hello");
+    //
+    // let ss = &mut s;
+
+    // this means string literal is stored on preallocated memory
+    // and preallocated memory space is located on read-only data segment
+    // read-only code segment collect all string literals when this program runs
+    // and remove duplicates and check literals that we can reuse
+    // &str is memory and length
+    // let element = " world";
+
+    // ss.push_str(element);
+    // println!("{}", ss);
+    // println!("{}", s);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // note: all local variables must have a statically known size
+    // help: unsized locals are gated as an unstable feature
+    // note: all local variables must have a statically know size
+    // all local variables must have a statically known size means that
+    // int have a 4 bytes size and boolean has 1 byte size
+    // and char has a 1 byte size and floating number has a 8 bytes size
+
+    // 우리는 컴파일 타임에 스택 변수들의 사이즈를 알고 있어야 한다.
+    // 최소 length or type 그 자체가 가질 수 있는 memory bytes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let x = Box::new(-1);
+    let x_abs1 = i32::abs(*x);
+    let x_abs2 = x.abs();
+
+    // [GUIDELINE] 증요 -> str을 사용하면 안됨
+    // note all local variables must have a statically known size
+    // help: unsized locals are gated as an unstable features
+    // note: all local variables must have a statically know size
+
+    let r = &x;
+    let r_abs1 = i32::abs(**r);
+    // [GUIDELINE] 증요 -> stack을 받은 것이기 때문에 스택을 가지고 할 수있는 것들을 그냥 하면 된다.
+    //   그리고 heap의 소유권은 없이 그냥 stack을 사용하고 있는 것뿐.
+    let r_abs2 = r.abs();
+
+    let s = String::from("hello");
+    let s_len1 = str::len(s.as_str());
+    let s_len2 = s.len();
+
+    // println!("{x_abs1} {x_abs2}");
+    // println!("{r_abs1} {r_abs2}");
+    // println!("{s_len1} {s_len2}");
+
+    // reads the heap value directly
+    // and Box
+
+    // println!("{}", a);
+    // return;
+    // let mut x = Box::new(1);
+    // let a = *x;
+    // *x += a;
+    //
+    // // x stack memory의 address
+    // let r1 = &x;
+    // let b = **r1;
+    //
+    // *x += b;
+    //
+    // // Box memory를 가리키는 것이 아니라 stack 메모리를 가리킨다.
+    // // Box 메모리를 가리키는 것이 아니라 스택 메모리를 가리킨다.
+    // // Box 메모리를 가리키는 것이 아니라 스택 메모리를 가리킨다.
+    // // 명시적으로 Box와 같이 표시가 되지 않으면 그것은 borrow 즉 스택 메모리를 가리키는 것이다.
+    //
+    // let r2 = &*x;
+    // // let c = *r2;
+    // drop(r2);
+    //
+    // println!("{}", r2);
+    // println!("{}", x);
+    // println!("{x}");
+    // println!("{c}");
+    // let first = String::from("Fe");
+    // let full = add_suffix(first);
+    //
+    // fn add_suffix(mut name: String) -> String{
+    //     name.push_str(" Jr.");
+    //     name
+    // }
+    //
+    // let a = "Ferris";
+    // let b = &"Ferrisa";
+    // let c = &&"Ferrisa";
+    // println!("{:p}", a);
+    // println!("{:p}", b);
+    // println!("{:p}", c);
+    // println!("{:p}", "Ferris");
+
+    // hey string literals is allocated to preallocated memory space(code segment)
+    // and x have a pointer to hey string literals'address and length on stack frame
+    let mut x = "hey";
+    // world is allocated on rumtime(execution of program when the program starts
+    // the world sting literal and all of the string literals have been allocated to preallocated memory space)
+    x = "world";
+
+    // how does that work that there already is a string "world" in read-only memory available at the start
+    // of the program? answer: during compilation, the compiler collects all string literals appearing in your entire program source
+    // possibly skipping the ones that are known to be never used, and possibly removing duplicates, and smae data in the same place in read-only
+    // memory can be re-used again.
+
+    //loaded into memory together with the program code when you start
+
+    // they are there for the whole duration of the program and they stay
+    // there forever.
+
+    // let mut a = 5;
+    // let b = a;
+    // a += 1;
+    //
+    // println!("{a}");
+    //
+    // let a_num = 4;
+    // make_and_drop();
+    //
+    // fn make_and_drop(){
+    //     let a_box = Box::new(5);
+    // }
+
+    // of the box from a to b
+    // // to avoid this situation, we finally arrive at ownership
+    // When a is bound to Box::new; we say that a owns the box. The
+    // statement let b = a moves ownership
+    // let a = Box::new([0; 10]);
+    // let b = &a;
+    //
+    // println!("{:?}", a);
+    // println!("{:?}", b);
+
+    // let n = 5;
+    // let y = plus_one(n);
+    // println!("The value of y is: {y}");
+    //
+    // fn plus_one(x: i32) -> i32 {
+    //     x + 1
+    // }
+
+
+
+
+
+//
+// let mut v: Vec<i32> = vec![1, 2, 3];
+// let num: &mut i32 = &mut v[2];
+//
+// println!("Third element is {}", *num);
+// println!("Again, the third element is {}", *num);
+// v.push(4);
 
 
 
