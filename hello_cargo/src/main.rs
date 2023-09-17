@@ -3,7 +3,7 @@
 // mod lib;
 
 use std::borrow::Borrow;
-use std::{io, ops};
+use std::{io, ops, vec};
 use std::ops::{Add, Deref};
 use std::ptr;
 
@@ -72,10 +72,165 @@ fn main() {
     // strin literal의 length와 pointer를 가지고 있다.
     // let aa = "sdfsdf";
     // &str은 length를 계산하여 가지고 있는 형태이고
-    // str은 preallocated 영역의 string 그 자체를 가지고 있는 느낌이다.
+        // str은 preallocated 영역의 string 그 자체를 가지고 있는 느낌이다.
+
+    let strings: Vec<String> = vec![];
+    let default = String::from("default");
+    let s = first_or(&strins, &default);
+
+    // println!("{:?}",strings);
+
+    fn first_or(strings: &Vec<String>, default: &String) -> &String {
+        if strings.len() > 0 {
+            &strings[0]
+        } else {
+            default
+        }
+    }
+
+    return;
+
+
+    // [GUIDELINE] 중요!!! -> String이 index로 바로 접근하지 못하게 하는 이유 =>  because UTF-8 is a variable-length encoding
+    //   If you are certain that your strings contain ascii characters only, you can yse
+    //   as_bytes() method on &str which returns a byte slice, and then index into this slice
+    let s = String::from("Hello world");
+    // vec<i32>의 경우는 i32이라는 size를 명확히 알고 있기 때문에 index로 access하고
+    // 추가적로으 접근하는 것(이유는 어차피 4bytes씩 이동하면 다음 index로 접근할 수 있으니까)
+    // 하지만 String은 아스키코드냐 utf-8이냐에 따라서 이동해야 하는 byte가 달라지기 때문에 쉽게 접근할 수 없게 만들어 놓은 것으로 추측된다.
+    let s_ref = &s;
+
+    println!("{s_ref}");
+    fn first(strings: &Vec<String>) -> &String {
+        let s_ref = &strings[0];
+        s_ref
+    }
+
+
+    return;
+    // fn ascii_capitalize(v: &mut Vec<char>) {
+    //     // v: rwo
+    //
+    //     // c: ro
+    //     // v: r
+    //     // c*: r
+    //     let c = &v[0];
+    //
+    //     if c.is_ascii_lowercase(){
+    //         let up = c.to_ascii_uppercase();
+    //
+    //         v[0] = up;
+    //
+    //         println!("{:?}", v);
+    //     }else{
+    //         println!("Already capitalized: {:?}", v);
+    //
+    //     }
+    // }
+    //
+    // let mut str = Vec::new();
+    //
+    // str.push('c');
+    //
+    // ascii_capitalize(&mut str);
+
+    return;
+
+
+
+
+
+
+    // x : rwo
+    // let mut x = 1;
+    // // y: ro | x: r | *x: r
+    // let y = &x;
+    // // z는 1일 것인데 call by value로 1의 값이 복사된 듯하다.
+    // // z: ro
+    // let z = *y;
+    // x += z;
+    //
+    // println!("{x}");
+
+    return;
+    let mut v = vec![1,2,3];
+    // num has ro permission
+    // *num has read and write permission
+    let num = &mut v[2];
+
+    let num2 = &*num;
+
+    println!("{} {}", *num, *num2);
+    return;
+    // [GUIDELINE] 중요
+    //  Creating a reference to data causes that data to be temporarily read-only until the reference is
+    //  no longer used.
+
+    let mut v = vec![1,2,3];
+    // num gets +ro permissions
+
+    // 전체 벡터의 index 일부만 borrow가 일어나도 소유권은 완전히 move된다.
+    let num = &mut v[1];
+
+    // *num gets read and write permissions
+    // num = &mut v[0];
+    *num += 11;
+
+
+    println!("{num}");
+
+    println!("{:?}", v);
+    return;
+    let mut v = vec![1,2,3];
+    let num = &v[2];
+
+    let a = *num;
+    println!("{a}");
+
+    v.push(23);
+    return;
+
+    let mut v = vec![1,2,3];
+    let num = &v[2];
+
+    println!("{}", *num);
+    println!("{}", *num);
+
+    v.push(22);
+    return;
+
+    // paths
+    // Variable, like a.
+    // Dereferences of paths, like *a
+    // Array acdesses of paths, like a[0]
+    // Fields of paths, like a.0 for tuples or a.field for structs
+    // Any combination of the above like *((*a)[0].1).
+
+    let mut x = 0;
+    let mut x_ref = &mut x;
+
+    *x_ref +=11;
+    println!("{}", x_ref);
+    return;
 
     // 하지만 string이라는 것은 결국 char[u8]의 array에 불과하고 string은 정확하게
     // we don't know how many bytes has on compile time
+    let mut v = vec![1,2,3];
+    // heap memory의 1번 인덱스의 2 address를 참조하고 있다.
+    // owner is num
+    // the data in v has been borrowed by num.
+    let mut num = &v[1];
+
+    println!("{:?}", v);
+
+    println!("{}", num);
+    v[0] = 11;
+    // no longer num is used, so the ownership is moved to v
+    // println!("{}", *num);
+
+    v.push(3);
+    println!("{:?}", v);
+    return;
 
     let mut v = vec![1,2,3]; // length, capacity, pointer
     // [GUIDELINE] 중요 vec의 element에 대해서 하나의 address의 ownership만 넘길 수 없다.
