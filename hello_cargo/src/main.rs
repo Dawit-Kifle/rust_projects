@@ -83,24 +83,115 @@ fn main() {
     // 그래서 let a = "string"; 을 했을 때, type inference 되는 것이 &str이 나오는 이유는
     // static space에 존재하는 string literals의 주소를 참조하는 것이기 때문이다.
 
+    fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
+        let largest: &String = dst.iter().max_by_key(|s| s.len()).unwrap();
+        for s in src {
+            if s.len() > largest.len() {
+                dst.push(s.clone());
+            }
+        }
+    }
 
-    // x: rwo , *x: rw
-    let mut x: Box<i32> = Box::new(1);
-    let a = x.as_ref();
-
-    let b = x;
-
-    println!("{b}");
-
-    // let mut a = &mut *x;
-    // let a1 = x.as_mut();
-    // let xx = &mut *x;
+    return;
 
 
-    // println!("{:p}", a);
-    // *a = 32;
-    // *x += 33;
-    // println!("{:p}", &*x);
+    let name = vec![String::from("Ferris"), String::from("dududu")];
+
+    let first = &name[0];
+    // stringify_name_with_title(&name);
+    // println!("{}", first);
+
+     fn stringify_name_with_title(name: &Vec<String>) -> String {
+        let mut full = name.join(" ");
+         println!("ddd {}", full);
+        full.push_str(" Esq.");
+        full
+    }
+
+    println!("{}", stringify_name_with_title(&name));
+
+    // let a = ["hello", "world"];
+    //
+    // println!("{:?}", a);
+    //
+    // fn stringify_name_with_title(name: &mut Vec<String>) -> String {
+    //     name.push(String::from("Esq."));
+    //     let full = name.join(" ");
+    //     full
+    // }
+
+
+
+    // let s = String::from("Hello World");
+    // let s_ref = &s;
+    //
+    // let ss = return_a_string();
+    //
+    // fn return_a_string() -> String {
+    //     let s = String::from("Hello world");
+    //     // move ownership
+    //     // heap memory의 address를 return 하면 heap memory의 adress가 stack frame
+    //     s
+    // }
+    //
+    // // this solution applies if we never intend to change the string, and the a heap
+    // // allocation is unnecessary
+    // fn return_a_string1() -> &'static str {
+    //     "Hello world"
+    // }
+    //
+    // use std::rc::Rc;
+    // fn return_a_string2() -> Rc<String> {
+    //     // provides shared ownership of a value of type T
+    //     // allocated in the heap. Invoking clone on Rc
+    //     let s = Rc::new(String::from("Hello world"));
+    //     Rc::clone(&s)
+    // }
+    //
+    //
+    //
+    // let mut sss = String::from("djfkdjfkjd");
+    //
+    // return_a_string3(&mut sss);
+    //
+    // println!("{sss}");
+    // fn return_a_string3(output: &mut String){
+    //     output.replace_range(.., "He");
+    //
+    // }
+
+    // fn return_a_string2() ->  {
+    //     let s: &'static   = String::from("Hello world");
+    //     // move ownership
+    //     // heap memory의 address를 return 하면 heap memory의 adress가 stack frame
+    //     s
+    // }
+
+
+    // let mut x: Box<i32> = Box::new(1);
+    //
+    // // *x -> 자체가 heap value의 ownership 그 자체다.
+    //
+    // let a = *x;         // *x reads the heap value, so a = 1
+    //
+    //
+    // // modify heap value
+    // // modify heap value
+    // // modify heap value
+    // // modify heap value
+    // *x += 3;                 // *x on the left-side modifies the heap value,
+    //                          //     so x points to the value 2
+    //
+    // let r1: &Box<i32> = &x;
+    // let b= **r1;
+    //
+    // let mut r2 = &mut *x;
+    // println!("{r2}");
+    // // let zz = **r2;
+    // *r2 += 1;
+    //
+    // println!("{a}");
+
     return;
 //     // a는 box의 1을 가리킴
 //     // call by value -> ro
