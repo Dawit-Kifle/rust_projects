@@ -85,20 +85,108 @@
 //     // }
 // }
 
+use std::any::Any;
 use std::env;
+
+#[derive(Debug)]
+struct User {
+    name: String,
+    age: i32,
+
+}
+#[derive(Debug)]
+struct Point { x: i32, y: String }
+
+#[derive(Debug)]
+struct Color (i32, i32, i32);
+
+struct AlwaysEqual;
+
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32
+}
+
+impl Rectangle{
+    // Self means the type of impl block points
+    // function that has self parameter we call method
+    fn area(self: &Self) -> u32{
+
+        self.width * self.height
+    }
+
+
+    fn width (&self) -> bool {
+        self.width > 0
+    }
+
+    // [GUIDELINE] This is associated function
+    fn square(size: u32) -> Self {
+        Self {
+            width: size,
+            height: size,
+        }
+    }
+}
 
 fn main() {
 
-    let number_list = vec![34, 50, 25, 100, 65];
+    // Unlike functions, methods are defined within the context of a struct
+    // and their first parameter is always self, which represents the instace of the
+    // struct the method is being called on.
 
-    let mut largest = number_list[0];
+    let mut rect1 = Rectangle{
+        width: 30,
+        height: 50,
+    };
 
-    for number in number_list {
-        if number > largest {
-            largest = number;
-        }
-    }
-    println!("{}", largest);
+
+
+    // let mut p = Point { x: 0, y: String::from("123") };
+    // // temporarily lose their permissions but not p.y
+    // // On struct, p.y and p.x ownership has no relationship with those each other
+    // let mut x = &mut p.x;
+    //
+    // println!("{:?}", p.y);
+    //
+    // *x += 12;
+
+
+    // let subject = AlwaysEqual;
+    //
+    // let xlet black_color = Color(0,0,0);
+    //
+    //
+    // let mut u1 = User {
+    //     name: String::from("가"),
+    //     age: 333,
+    //
+    // };
+    //
+    // // partially move!!
+    // let u2 = User{
+    //     //name: u1.name,
+    //     name: String::from("sdfsdfsdf"),
+    //     // The types of active and sign_in_count are types that implement the
+    //     // copy trait, so the behavior we discussed in the Copying vs Moving out of a
+    //     age: u1.age
+    // };
+    //
+    //
+    // println!("{:?}", u1);
+    // println!("{:?}", u2);
+
+        // let number_list = vec![34, 50, 25, 100, 65];
+    //
+    // let mut largest = number_list[0];
+    //
+    // for number in number_list {
+    //     if number > largest {
+    //         largest = number;
+    //     }
+    // }
+    // println!("{}", largest);
     // two hypens to indicate the following arguments are for our program rather than for cargo,
     // a strig to search for, and a path to a file to search in, like so:
     // let args: Vec<String> = env::args().collect();
