@@ -109,6 +109,14 @@ struct Rectangle {
 }
 
 impl Rectangle{
+    // [GUIDELINE] This is associated function
+    fn square(size: u32) -> Self {
+        Self {
+            width: size,
+            height: size,
+        }
+    }
+
     // Self means the type of impl block points
     // function that has self parameter we call method
     fn area(self: &Self) -> u32{
@@ -117,17 +125,11 @@ impl Rectangle{
     }
 
 
-    fn width (&self) -> bool {
-        self.width > 0
+    fn set_width(&mut self, width: u32) {
+        self.width = width;
     }
 
-    // [GUIDELINE] This is associated function
-    fn square(size: u32) -> Self {
-        Self {
-            width: size,
-            height: size,
-        }
-    }
+
 }
 
 fn main() {
@@ -135,13 +137,41 @@ fn main() {
     // Unlike functions, methods are defined within the context of a struct
     // and their first parameter is always self, which represents the instace of the
     // struct the method is being called on.
+    enum Message {
 
-    let mut rect1 = Rectangle{
-        width: 30,
-        height: 50,
-    };
+    }
 
+    let mut x = &Box::new(1);
 
+    println!("{:p}", x);
+    println!("{:p}", &x);
+    return;
+
+    let r =&mut Box::new(Rectangle{
+        width: 1,
+        height: 2,
+    });
+
+    let mut r1 = Box::new(Rectangle{
+        width: 1,
+        height: 2,
+    });
+
+    r.set_width(3333);
+    //let aaa = *r1;
+    r1.set_width(232323);
+
+    // r1.width
+    println!("{:?}", r1.width);
+
+    //println!("{:?}", r);
+    // let area1 = r.area();
+    // let area2 = Rectangle::area(&r);
+    //
+    // assert_eq!(area1, area2);
+    // r.set_width(32);
+    // println!("{} {}", area1, area2);
+    // println!("{:?}", r);
 
     // let mut p = Point { x: 0, y: String::from("123") };
     // // temporarily lose their permissions but not p.y
