@@ -94,15 +94,13 @@ struct User {
     age: i32,
 
 }
-#[derive(Debug)]
-struct Point { x: i32, y: String }
 
 #[derive(Debug)]
 struct Color (i32, i32, i32);
 
 struct AlwaysEqual;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 struct Rectangle {
     width: u32,
     height: u32
@@ -129,22 +127,120 @@ impl Rectangle{
         self.width = width;
     }
 
+    fn max(self, other: Rectangle) -> Rectangle{
+        Rectangle{
+            width: self.width.max(other.width),
+            height: self.height.max(other.height)
+        }
+    }
 
+    fn set_to_max(&mut self, other: Rectangle) {
+        let max = self.max(other);
+        *self = max;
+    }
+}
+
+#[derive(Debug)]
+struct Point { x: i32, y: i32 }
+
+impl Point {
+    fn get_x(&mut self) -> &i32{
+        self.x +=23;
+        &self.x
+    }
 }
 
 fn main() {
 
-    // Unlike functions, methods are defined within the context of a struct
-    // and their first parameter is always self, which represents the instace of the
-    // struct the method is being called on.
-    enum Message {
+    // vector안의 타입이 primitive type이냐
+    // String 혹은 (custom type or heap memory에 올라가는 type이냐)에
+    // 따라서 Copy trait이냐 Clone trait이냐가 달라진다.
 
-    }
+    let v = vec![1,2,3];
+    // this means ownership is transferred
+    let n_ref = &v[0];
 
-    let mut x = &Box::new(1);
+    let n = *n_ref;
+    println!("{}", n_ref);
 
-    println!("{:p}", x);
-    println!("{:p}", &x);
+    // case1 ownership을 아예 옮김
+    let v = vec![String::from("Hello")];
+    // let n_ref = &v[0];
+    let s = v;
+
+    // case2 v도 heap memory 위에 있는 String을 가리키고 있고
+    // ownership도 옮아가지 않을 상태임
+    let v = vec![String::from("Hello")];
+    // 그 상태에서 heap memory 위에 있는 String의 메모리를
+    // stack에다가 옮기니 참조가 두 개가 동시에 되고 있음
+    // let n_ref = v[0];
+
+    println!("{}", 0u32);
+
+
+//     let mut n = 0;
+//     let a = &mut n;
+//
+//     *a += 22;
+// // let b = a;
+//     println!("{:?}", n);
+//
+//     //shallow copy
+//     // deep clone
+//
+//     let v = vec![String::from("Hello")];
+//
+//     let s_ref = &v[0];
+//
+//     let s = &*s_ref;
+
+    // An i32 does not own heap data, them it can be copied without a move
+    // A String does own heap data, so it can not be copied without a move.
+    // An &String does not own heap data, so it can be copied without a move.
+
+
+    //
+    // let mut p = Point {
+    //     x: 1,
+    //     y:2
+    // };
+    //
+    // let x = p.get_x();
+    // println!("{} {}", *x, p.y);
+    // // println!("{} ", p.y);
+    //
+    //
+    //
+    // // Unlike functions, methods are defined within the context of a struct
+    // // and their first parameter is always self, which represents the instace of the
+    // // struct the method is being called on.
+    //
+    // let mut rect = Rectangle {
+    //     width: 0,
+    //     height: 1
+    // };
+    //
+    // let other_rect = Rectangle{
+    //     width: 1,
+    //     height:0
+    // };
+    //
+    // // 말하고자 하는 바는 애초에 set_to_max에 parameter로 &가(borrow로 넘어옴)
+    // // argument가 borrow인데 set_to_max
+    // rect.set_to_max(other_rect);
+
+
+    // 벡터를 생각한다면 벡터는 unknowsized and 정확하게 정해져 있는 사이즈를 가지고 있지 않다.
+    // 벡터의 특성
+    // 1. 벡터의 사이즈는 변한다.(capacity를 통해서 총 사이즈를 조절한다.)
+    // 2. 벡터의 사이즈가 변할 때 기존의 메모리 space에서 다른 spacd로 이동을 한다.
+    // 3. 2번의 인과 -> 따라서 다른 메모리 space로 이동할 때 기존에 참조하고 있던 stack frame의 변수가 undefined될 수가 있다.
+
+    // let other_rect = Rectangle{ width: 1, height:1 };
+    // let max_rect = rect.max(Rectangle{ width: 1, height:1 });
+    //
+    // println!("{:?}", max_rect);
+
     return;
 
     let r =&mut Box::new(Rectangle{
