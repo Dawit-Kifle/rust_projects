@@ -143,6 +143,19 @@ impl Rectangle{
 #[derive(Debug)]
 struct Point { x: i32, y: i32 }
 
+impl Copy for Point { }
+
+impl Clone for Point {
+
+    fn clone(&self) -> Self {
+        *self
+    }
+
+    fn clone_from(&mut self, source: &Self) {
+        *self = source.clone();
+    }
+}
+
 impl Point {
     fn get_x(&mut self) -> &i32{
         self.x +=23;
@@ -150,32 +163,62 @@ impl Point {
     }
 }
 
+
+
+use std::mem::size_of;
 fn main() {
 
-    // vector안의 타입이 primitive type이냐
+    //assert_eq!(4, size_of::<Option<bool>>());
+
+    const WIDTH: usize = size_of::<&()>();
+    const DOUBLE_WIDTH: usize = 2 * WIDTH;
+
+    let nums = &[1,2,3];
+    // println!("{:?}", nums);
+
+    assert_eq!(WIDTH, size_of::<&[i32; 3]>());
+
+    // slices are double-width becuase they store a pointer to the array and the number of elements in the array
+
+    // unsized types are
+    // &str / &[i32] / &dyn ToString
+    // Box<dyn ToString> // &Unsized
+
+    // let mut p = Point{ x:22, y: 23};
+    // let a = Point{x:2323, y:1111};
+    // p.clone_from(&a);
+    //
+    // println!("{:?}", p);
+    // println!("{:?}", a);
+    // let copy1 = p;
+
+    //println!("{:?} {:?}", p, copy1);
+    // println!("{:?} ", p);
+    // p.clone_from()
+    //  vector안의 타입이 primitive type이냐
     // String 혹은 (custom type or heap memory에 올라가는 type이냐)에
     // 따라서 Copy trait이냐 Clone trait이냐가 달라진다.
 
-    let v = vec![1,2,3];
-    // this means ownership is transferred
-    let n_ref = &v[0];
-
-    let n = *n_ref;
-    println!("{}", n_ref);
-
-    // case1 ownership을 아예 옮김
-    let v = vec![String::from("Hello")];
+    // let v = vec![1,2,3];
+    // // this means ownership is transferred
     // let n_ref = &v[0];
-    let s = v;
-
-    // case2 v도 heap memory 위에 있는 String을 가리키고 있고
-    // ownership도 옮아가지 않을 상태임
-    let v = vec![String::from("Hello")];
-    // 그 상태에서 heap memory 위에 있는 String의 메모리를
-    // stack에다가 옮기니 참조가 두 개가 동시에 되고 있음
-    // let n_ref = v[0];
-
-    println!("{}", 0u32);
+    //
+    // let n = *n_ref;
+    // println!("{}", n_ref);
+    //
+    // // case1 ownership을 아예 옮김
+    // let v = vec![String::from("Hello")];
+    // // let n_ref = &v[0];
+    // let s = v;
+    //
+    // // case2 v도 heap memory 위에 있는 String을 가리키고 있고
+    // // ownership도 옮아가지 않을 상태임
+    // let v = vec![String::from("Hello")];
+    // // 그 상태에서 heap memory 위에 있는 String의 메모리를
+    // // stack에다가 옮기니 참조가 두 개가 동시에 되고 있음
+    // // let n_ref = v[0];
+    //
+    // println!("{}", 0u32);
 
 
 //     let mut n = 0;
