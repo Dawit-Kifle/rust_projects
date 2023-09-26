@@ -169,7 +169,85 @@ use std::mem::{size_of, size_of_val};
 use std::mem;
 use std::rc::Rc;
 
+// #[derive(Debug)]
+// pub struct Range<Idx> {
+//     pub start: Idx,
+//     pub end: Idx,
+// }
+
+fn show(pt: &Point) {
+    println!("({}, {})", pt.x, pt.y);
+}
+
 fn main() {
+
+    let box_pt = Box::new(Point { x: 10, y: 20 });
+    let a = *box_pt;
+
+
+    // RefCell은 stack에 counter가 저장된다.
+    use std::cell::RefCell;
+    let rc = RefCell::new(42);
+    let b1 = rc.borrow_mut();
+    let b2 = rc.borrow_mut();
+
+    println!("{}, {}", b1, b2);
+
+
+    // rc pointer type은 stack에 오로지 buffer만 가지고 heap에 reference를 비롯한 smart한 정보를 저장한다.
+    // let rangee = Range<i32>{
+    //     start: ,
+    //     end:
+    // };
+
+
+    let v = Rc::new(vec!["Odin".to_string(), "Loki".to_string(), "Thor".to_string()]);
+    let v_clone = v.clone();
+
+    // [ stack frame ]
+    // v => buffer of Vector of heap memory
+    // v_clone => buufer of Vector of heap memory
+
+    // [ heap memory ]
+    // reference counted : 2/ Vec => buffer , len , capacity
+    // Vec buffer direct to Odin String buffer , len, capacity | Loki String buffer , len, capacity Thor String buffer , len, capacity
+
+    // "Odin" | "Loki" | "Thor"
+
+    // let mut s = String::from("강용수 Hello KYS");
+    // let s2 = s.bytes();
+    // //bytess(&s);
+    // println!("{:?}", s2);
+    // let s1 = &s[0..3].is_ascii();
+    // println!("{:?}", s1);
+    //
+
+
+    // let s = "용아 Kang Yongsu";
+    // preallocated read-only memory space where string literals are stored
+    // and string literals is collected when program starts and find reusable and duplicated string
+    // the virtual memory architecture is code segment(text segment)
+    // let s1 = s.chars();
+    // println!("{:?}", s1);
+
+    // argument memory
+    // return address
+    // stack base pointer
+    // stack local variables
+
+    // memory layout
+
+    // env, args and so on
+    // stack memory
+    // heap memory
+    // BSS segment
+    // uninitialized global variables
+    // data segment
+    // The data segment contains initialized static variables, global variables, local static variables
+    // text segment(code segment)
+    // The text segment contains these exectuable instructions
+    // text segment is read-only part
+
 
     // nested function은 .text(code) segment에 함수 선언부 그 내에 다시 선언된다.
     // In function stack frame the argument line and stack local variable line is differentiated
@@ -181,100 +259,100 @@ fn main() {
     // 3. main의 base pointer를 통해서 main 함수 내에 있는 loca varible들에 대해서 접근할 수있음.
 
 
-    let a = 222;
-
-    let get_a = || {
-        println!("a    : {}", a);
-    };
-
-    get_a();
-
-    // Rc
-    let r1 = Rc::new(vec!["Thor".to_string(), "Loki".to_string(),"Odin".to_string()]);
-    let r2 = r1.clone();
-
-
-
-    // [ STACK FRAME ]
-    // let r1은 reference이다. Vec를 가리키는 Vec는 heap memory 상에 있다.
-    // let r2는 reference이다. Vec을 가리킨다. Vec은 heap memory 상에 있다.
-
-    // [ HEAP ]
-    // Vec이 있다. Rc에 의해 할당되었기 때문에 Reference Counted라고 하는 값이 추가로 할당되어져 있다.
-    // 현재 Rc는 2이다. 왜냐하면 r2가 r1.clone을 했기 때문이다.
-    // Rc : 2 / buffer : String의 첫번째 주소를 가리킨다. / len : 3 / capacity : 3
-    // String str buffer / len / capacity || str buffer2 / len2 / capacity2 || str buffer3 / len3 / capacity3
-    // "THOR" / "LOKI" / "ODIN"
-
-    let mut t1 = Rc::new(1);
-    t1 = Rc::new(2323);
-    println!("rcsss : {}", t1);
-
-
-    let a = 23;
-    let b = &a;
-    let c = &b;
-    //println!("{} {}", size_of::<i32>(), size_of::<&i32>());
-
-    let a = [55,66,77];
-
-    let b = &a;
-
-    //let c = &a[0..2];
-    let s = "sssss";
-
-    let s1 = &s[1..2];
-
-    println!("ccc: {:?}", s1);
-
-
-    //println!("{:?}", size_of::<[i32;3]>());
-
-    // This also means that you cannot store it in variables since it doesn't have a known size
-
-    // this is &[i32] i32 slices
-    // this is &[i32] i32 slices
-    // this is &[i32] i32 slices
-
-    // i32 slices인 이유는 array에서 특정 index의 포인터만 가지고 있기 때문에
-    // 그리고 length와 &str이 preallocated memory 상에 있는 str literal의 pointer와 length를 가지고 있듯이
-    // 혹은 String으로부터 받아온 시작점의 String heap memory의 pointer address를 가지고 있고 length를 가지고 있듯이.
-
-    // When the next function is called, it's stack frame will overwrite this memory
-    // in a language with a garbage collector the compiler will automatically detect this and allocate that variable
-    // on the heap memory and return a reference to it, but there is some extra
-    // cost to allocating on the heap
-
-    //assert_eq!(4, size_of::<Option<bool>>());
-
-
-
-    // data length stored in type
-    // an [i32; 3] is an array of three i32s
-
-
-    let nums = &[22;3];
-    let a = nums[0];
-
-    assert_eq!(WIDTH, size_of::<&[i32;3]>());
-
-
-    println!("{:?}", a);
-    let nums_index = &nums[1..];
-
-    println!("{:?}", nums_index);
-    // println!("{:?}", nums);
-    let mut sum = 0;
-
-    for num in nums{
-        sum += num;
-    }
-
-    println!("{}", sum);
-
-    let nums = &[1,2,3];
-
-    assert_eq!(DOUBLE_WIDTH, size_of::<&[i32]>());
+    // let a = 222;
+    //
+    // let get_a = || {
+    //     println!("a    : {}", a);
+    // };
+    //
+    // get_a();
+    //
+    // // Rc
+    // let r1 = Rc::new(vec!["Thor".to_string(), "Loki".to_string(),"Odin".to_string()]);
+    // let r2 = r1.clone();
+    //
+    //
+    //
+    // // [ STACK FRAME ]
+    // // let r1은 reference이다. Vec를 가리키는 Vec는 heap memory 상에 있다.
+    // // let r2는 reference이다. Vec을 가리킨다. Vec은 heap memory 상에 있다.
+    //
+    // // [ HEAP ]
+    // // Vec이 있다. Rc에 의해 할당되었기 때문에 Reference Counted라고 하는 값이 추가로 할당되어져 있다.
+    // // 현재 Rc는 2이다. 왜냐하면 r2가 r1.clone을 했기 때문이다.
+    // // Rc : 2 / buffer : String의 첫번째 주소를 가리킨다. / len : 3 / capacity : 3
+    // // String str buffer / len / capacity || str buffer2 / len2 / capacity2 || str buffer3 / len3 / capacity3
+    // // "THOR" / "LOKI" / "ODIN"
+    //
+    // let mut t1 = Rc::new(1);
+    // t1 = Rc::new(2323);
+    // println!("rcsss : {}", t1);
+    //
+    //
+    // let a = 23;
+    // let b = &a;
+    // let c = &b;
+    // //println!("{} {}", size_of::<i32>(), size_of::<&i32>());
+    //
+    // let a = [55,66,77];
+    //
+    // let b = &a;
+    //
+    // //let c = &a[0..2];
+    // let s = "sssss";
+    //
+    // let s1 = &s[1..2];
+    //
+    // println!("ccc: {:?}", s1);
+    //
+    //
+    // //println!("{:?}", size_of::<[i32;3]>());
+    //
+    // // This also means that you cannot store it in variables since it doesn't have a known size
+    //
+    // // this is &[i32] i32 slices
+    // // this is &[i32] i32 slices
+    // // this is &[i32] i32 slices
+    //
+    // // i32 slices인 이유는 array에서 특정 index의 포인터만 가지고 있기 때문에
+    // // 그리고 length와 &str이 preallocated memory 상에 있는 str literal의 pointer와 length를 가지고 있듯이
+    // // 혹은 String으로부터 받아온 시작점의 String heap memory의 pointer address를 가지고 있고 length를 가지고 있듯이.
+    //
+    // // When the next function is called, it's stack frame will overwrite this memory
+    // // in a language with a garbage collector the compiler will automatically detect this and allocate that variable
+    // // on the heap memory and return a reference to it, but there is some extra
+    // // cost to allocating on the heap
+    //
+    // //assert_eq!(4, size_of::<Option<bool>>());
+    //
+    //
+    //
+    // // data length stored in type
+    // // an [i32; 3] is an array of three i32s
+    //
+    //
+    // let nums = &[22;3];
+    // let a = nums[0];
+    //
+    // assert_eq!(WIDTH, size_of::<&[i32;3]>());
+    //
+    //
+    // println!("{:?}", a);
+    // let nums_index = &nums[1..];
+    //
+    // println!("{:?}", nums_index);
+    // // println!("{:?}", nums);
+    // let mut sum = 0;
+    //
+    // for num in nums{
+    //     sum += num;
+    // }
+    //
+    // println!("{}", sum);
+    //
+    // let nums = &[1,2,3];
+    //
+    // assert_eq!(DOUBLE_WIDTH, size_of::<&[i32]>());
 
 
     // slices are double-width becuase they store a pointer to the array and the number of elements in the array
