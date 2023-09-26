@@ -85,8 +85,6 @@
 //     // }
 // }
 
-use std::any::Any;
-use std::env;
 
 #[derive(Debug)]
 struct User {
@@ -179,30 +177,44 @@ fn show(pt: &Point) {
     println!("({}, {})", pt.x, pt.y);
 }
 
+use std::env;
+use std::fs;
+
 fn main() {
 
-    let box_pt = Box::new(Point { x: 10, y: 20 });
-    let a = *box_pt;
+    let args: Vec<String> = env::args().collect();
 
+    let query = &args[1];
+    let file_path = &args[2];
 
-    // RefCell은 stack에 counter가 저장된다.
-    use std::cell::RefCell;
-    let rc = RefCell::new(42);
-    let b1 = rc.borrow_mut();
-    let b2 = rc.borrow_mut();
+    println!("Searching for {}", query);
+    println!("In file {}", file_path);
 
-    println!("{}, {}", b1, b2);
+    let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
 
-
-    // rc pointer type은 stack에 오로지 buffer만 가지고 heap에 reference를 비롯한 smart한 정보를 저장한다.
-    // let rangee = Range<i32>{
-    //     start: ,
-    //     end:
-    // };
-
-
-    let v = Rc::new(vec!["Odin".to_string(), "Loki".to_string(), "Thor".to_string()]);
-    let v_clone = v.clone();
+    println!("{:?}", contents);
+    // let box_pt = Box::new(Point { x: 10, y: 20 });
+    // let a = *box_pt;
+    //
+    //
+    // // RefCell은 stack에 counter가 저장된다.
+    // use std::cell::RefCell;
+    // let rc = RefCell::new(42);
+    // let b1 = rc.borrow_mut();
+    // let b2 = rc.borrow_mut();
+    //
+    // println!("{}, {}", b1, b2);
+    //
+    //
+    // // rc pointer type은 stack에 오로지 buffer만 가지고 heap에 reference를 비롯한 smart한 정보를 저장한다.
+    // // let rangee = Range<i32>{
+    // //     start: ,
+    // //     end:
+    // // };
+    //
+    //
+    // let v = Rc::new(vec!["Odin".to_string(), "Loki".to_string(), "Thor".to_string()]);
+    // let v_clone = v.clone();
 
     // [ stack frame ]
     // v => buffer of Vector of heap memory
