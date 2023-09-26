@@ -171,6 +171,15 @@ use std::rc::Rc;
 
 fn main() {
 
+    // nested function은 .text(code) segment에 함수 선언부 그 내에 다시 선언된다.
+    // In function stack frame the argument line and stack local variable line is differentiated
+    // base pointer를 기준으로 위는 parameter 변수 아래는 -8 -16은 local variable이다.
+
+    // main 함수에서 f 함수를 호출함.
+    // 1. f 함수에 return address(main 함수)를 저장함.
+    // 2. return address - 8에 stack base pointer(main 함수)를 저장함.
+    // 3. main의 base pointer를 통해서 main 함수 내에 있는 loca varible들에 대해서 접근할 수있음.
+
 
     let a = 222;
 
