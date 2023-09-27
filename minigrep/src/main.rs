@@ -164,7 +164,7 @@ const DOUBLE_WIDTH: usize = 2 * WIDTH;
 
 use std::mem::{size_of, size_of_val};
 
-use std::mem;
+use std::{fs, mem};
 use std::rc::Rc;
 
 // #[derive(Debug)]
@@ -178,21 +178,61 @@ fn show(pt: &Point) {
 }
 
 use std::env;
-use std::fs;
+use std::fs::File;
+use std::io::prelude::*;
 
+struct Config {
+    // In structs use owned values, such as String.
+    // In structs use owned values, such as String.
+    // In structs use owned values, such as String.
+    // In strcuts use owned values, such as String.
+    // In structs use owned values, such as String.
+    query: String,
+    file_path: String
+}
+
+impl Config {
+    // [GUIDELINE] In structs use owned values, such as String.
+    fn new(args: &[String]) -> Config {
+        if args.len() < 3 {
+            panic!("not enough arguments");
+        }
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        Config { query, file_path }
+    }
+}
 fn main() {
 
     let args: Vec<String> = env::args().collect();
+    // println!("{:?}", args);
+    let config = Config::new(&args);
 
-    let query = &args[1];
-    let file_path = &args[2];
+    println!("{} {}", config.query, config.file_path);
 
-    println!("Searching for {}", query);
-    println!("In file {}", file_path);
+    // let mut file =  File::create("poem.txt");
+    // file.expect("What's wrong").write_all(b"I'm nobody! Who are you?
+    //                                                 Are you nobody, too?
+    //                                                 Then there's a pair of us - don't tell!
+    //                                                 They'd banish us, you know.
+    //
+    //                                                 How dreary to be somebody!
+    //                                                 How public, like a frog
+    //                                                 To tell your name the livelong day
+    //                                                 To an admiring bog!");
 
-    let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
+    // fn parse_configg(args: &Vec<String>){
+    //     println!("{:?}", args);
+    // }
 
-    println!("{:?}", contents);
+    // let string_liters_slice = &args[0..2];
+    // let query = &envs[1];
+    // let file_path = &envs[2];
+
+    // let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
+    // println!("{}", contents);
+
     // let box_pt = Box::new(Point { x: 10, y: 20 });
     // let a = *box_pt;
     //
