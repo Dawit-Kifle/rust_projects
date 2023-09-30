@@ -216,22 +216,70 @@ use std::io::prelude::*;
 use std::process;
 use minigrep::Config;
 
+
+// fn dangling() -> &i32 {
+//
+//     let x = 33;
+//     &x
+// }
+
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len(){
+        x
+    }
+    else{
+        y
+    }
+}
+
+
 fn main() {
 
-    let args: Vec<String> = env::args().collect();
+    let string1 = String::from("abcd");
+    let string2: &'static str = "xyz";
 
-    let config = Config::build(&args).unwrap_or_else(|err|{
-        println!("Probelm parsing arguments: {err}");
-        process::exit(1);
-    });
+    let result = longest(string1.as_str(), string2);
 
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.file_path);
+    println!("{}", result);
 
-    if let Err(e) = minigrep::run(config){
-        println!("Application error : {e}");
-        process::exit(1);
-    }
+
+
+
+    /*
+        let my_string = String::from("he");
+
+        let word = first_word(&my_string[0..22]);
+        let word = first_word(&my_string[..]);
+
+        let word = first_word(&my_string);
+
+     */
+
+    //reference dangling
+
+    // let r;
+    //
+    // {
+    //     let x: &'static i32= &5;
+    //     r = x;
+    // }
+    //
+    // println!("{}", r);
+
+    // let args: Vec<String> = env::args().collect();
+    //
+    // let config = Config::build(&args).unwrap_or_else(|err|{
+    //     println!("Probelm parsing arguments: {err}");
+    //     process::exit(1);
+    // });
+    //
+    // println!("Searching for {}", config.query);
+    // println!("In file {}", config.file_path);
+    //
+    // if let Err(e) = minigrep::run(config){
+    //     println!("Application error : {e}");
+    //     process::exit(1);
+    // }
 
 
 
