@@ -32,28 +32,16 @@ mod tests {
     use super::*;
 
     #[test]
-    fn one_result() {
+    fn case_sensitive() {
         let query = "duct";
         let contents = "\
-            Rust:
-            safe, fast, productive.
-            Pick three.";
+Rust:
+safe, fast, productive.
+Pick three.
+Duct tape.";
+
         assert_eq!(vec!["safe, fast, productive."], search(query, contents));
-
-    }
 }
-
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    vec![]
-}
-
-
-
-
-
-
-
-
 
 
 
