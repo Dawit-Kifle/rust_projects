@@ -223,24 +223,95 @@ use minigrep::Config;
 //     &x
 // }
 
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len(){
-        x
+// fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &'a str {
+//     if x.len() > y.len(){
+//         x
+//     }
+//     else{
+//         y
+//     }
+// }
+
+struct ImportExcerpt<'a> {
+    part: &'a str
+}
+//
+// impl ImportExcerpt {
+//     fn level(&self) -> i32 {
+//         3
+//     }
+//
+//     fn announce_and_return_part(&self, announcement: &str) -> &str {
+//         println!("{}", announcement);
+//         self.part
+//     }
+// }
+
+fn first_word<'a>(s: &'a str) -> &'a str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate(){
+        println!("{:?} {}", item, i);
+        if item == b' ' {
+            return &s[0..i];
+        }
     }
-    else{
-        y
+
+    &s[..]
+}
+
+fn f<'a, 'b>(s: &'a str, s1: &'b str) -> Option<&'a str>{
+
+    if s.len() >= s1.len(){
+        Some(s)
+    }else{
+        None
     }
 }
 
+#[derive(Debug)]
+struct S<'a> {
+    first: &'a str,
+    last: &'a str,
+}
+
+fn try_create(paragraph: &str) -> Option<S> {
+    let mut sentences = paragraph.split('.').filter(|s| !s.is_empty());
+    match (sentences.next(), sentences.next_back()){
+        (Some(first), Some(last)) => Some(S { first, last}),
+        (Some(first), None ) => Some(S { first, last: first} ),
+        _ => None,
+    }
+}
 
 fn main() {
 
-    let string1 = String::from("abcd");
-    let string2: &'static str = "xyz";
+    let s= f("ssdf213123123123123", "211111111112");
+    println!("{:?}", s);
 
-    let result = longest(string1.as_str(), string2);
+    let o: Option<S> = try_create("djkfjkldsjkfsdjkfjsdklfj");
 
-    println!("{}", result);
+    println!("{:?}", o);
+
+    // let novel = String::from("Call me Ishamel. sadfsd");
+    //
+    // // The function doesn't return a reference
+    // // There is exactly one reference input parameter
+    // // The function is a method, taking &self or &mut self as the first parameter
+    //
+    // first_word(&novel);
+    // let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+    //
+    // let i = ImportExcerpt { part: first_sentence };
+    //
+    // println!("{:?}", first_sentence);
+
+    // let string1 = String::from("abcd");
+    // let string2 = "xyz";
+    //
+    // let result = longest(string1.as_str(), string2);
+    //
+    // println!("{}", result);
 
 
 
