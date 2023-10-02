@@ -284,14 +284,37 @@ fn try_create(paragraph: &str) -> Option<S> {
     }
 }
 
+
 fn main() {
 
-    let s= f("ssdf213123123123123", "211111111112");
-    println!("{:?}", s);
 
-    let o: Option<S> = try_create("djkfjkldsjkfsdjkfjsdklfj");
 
-    println!("{:?}", o);
+//     let contents = "\
+// Rust:
+// safe, fast, productive.
+// Pick three.
+// Duct tape.";
+//     let query = "Rust";
+//     let results = search(query, contents);
+//
+//     println!("{:?}", results);
+
+
+
+    // let cont = contents.contains("rust");
+    // println!("{}", contents.to_lowercase());
+
+    // lines function feature is split with '\n' or carriage return
+
+
+
+    // println!("{:#?}", splited_contents);
+    // let s= f("ssdf213123123123123", "211111111112");
+    // println!("{:?}", s);
+    //
+    // let o: Option<S> = try_create("djkfjkldsjkfsdjkfjsdklfj");
+    //
+    // println!("{:?}", o);
 
     // let novel = String::from("Call me Ishamel. sadfsd");
     //
