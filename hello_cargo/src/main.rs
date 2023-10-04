@@ -50,9 +50,46 @@ use core::alloc;
 use std::fmt::format;
 use std::thread::scope;
 use std::str;
-
+use std::collections::HashMap;
 
 fn main() {
+
+    let text = "hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        let count = map.entry(word).or_insert(0);
+        *count += 1;
+    }
+
+    println!("{:?}", map);
+    // let mut scores = HashMap::new();
+    //
+    // scores.insert(String::from("Blue"), 10);
+    // //scores.insert(String::from("Yellow"), 20);
+    //
+    // scores.entry(String::from("Yellow")).or_insert(50);
+    // scores.entry(String::from("Blue")).or_insert(50);
+    // // copied를 할 경우 ownership을 가지는 새로운 heap memory struct 반환
+    // // let val = scores.get("Blue").copied();
+    // // // Hash map의 heap memory 위에 있는 값을 가져옴 -> & 레퍼런스가 있다.
+    // // let val = scores.get("Blue");
+    //
+    // for (key, value) in &scores{
+    //     println!("{key} {value}", );
+    // }
+
+
+    // let field_name = String::from("Favorite color");
+    // let field_value = String::from("Blue");
+    //
+    // let mut map = HashMap::new();
+    // map.insert(field_name, field_value);
+    // println!("{:#?}", val);
+
+
+
     // 매개변수로 포인터를 넣어도 여전히 call by value입니다.
     // 애초에 C는 call by value밖에 지원을하지않습니다.
     // (한 language에서 call by value , call by reference를 동시에 지원하는것은 불가능합니다)
@@ -83,14 +120,14 @@ fn main() {
     // 그래서 let a = "string"; 을 했을 때, type inference 되는 것이 &str이 나오는 이유는
     // static space에 존재하는 string literals의 주소를 참조하는 것이기 때문이다.
 
-    fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
-        let largest: &String = dst.iter().max_by_key(|s| s.len()).unwrap();
-        for s in src {
-            if s.len() > largest.len() {
-                dst.push(s.clone());
-            }
-        }
-    }
+    // fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
+    //     let largest: &String = dst.iter().max_by_key(|s| s.len()).unwrap();
+    //     for s in src {
+    //         if s.len() > largest.len() {
+    //             dst.push(s.clone());
+    //         }
+    //     }
+    // }
 
     return;
 
