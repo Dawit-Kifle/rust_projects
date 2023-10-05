@@ -52,21 +52,40 @@ use std::thread::scope;
 use std::str;
 use std::collections::HashMap;
 use std::time::SystemTime;
-use chrono::{DateTime, Local, NaiveDate, TimeZone, Utc};
+use chrono::{DateTime, format, Local, NaiveDate, NaiveDateTime, TimeZone, Utc};
 
 fn main() {
 
-    let birth = "1989-10-25";
 
+    let x = Some(2);
+    //let x: Option<i32> = None;
+    let y: Option<&str> = Some("y");
 
-    let dt = Local::now();
-    dt.naive_utc();
-    println!("{}", dt.naive_utc());
-    // println!("{:?}", NaiveDate::from_ymd_opt(1989, 10, 25));
-    println!("LOCAL : {:?}", Local::now());
-    println!("UTC : {:?}", Utc::now());
-    let utc_date = Utc.with_ymd_and_hms(1989, 10, 25, 0, 0, 0).unwrap();
-    println!("{:?}", utc_date);
+    println!("{:?}", x.and_then(|x| Some(x+10)));
+
+    // let birth = "1989-10-25";
+    //
+    // let now_datetime = Local::now();
+    // let now_date = now_datetime.date_naive();
+    // let d = NaiveDate::parse_from_str("1989-10-25", "%Y-%m-%d");
+    // println!("{:?}", d.unwrap().years_since(now_date));
+    // println!("{:?}", now_date.years_since(d.unwrap()));
+    //
+    // let birth = "1989-10-25";
+    // let now = Local::now().years_since();
+    // let today = now.date_naive();
+    //
+    // println!("now : {now}\n today : {}", today.and_time());
+
+    // println!("{}", dt.naive_utc());
+
+    // dt.naive_utc().timestamp();
+    // println!("{}", dt.naive_utc().timestamp());
+    // // println!("{:?}", NaiveDate::from_ymd_opt(1989, 10, 25));
+    // println!("LOCAL : {:?}", Local::now());
+    // println!("UTC : {:?}", Utc::now());
+    // let utc_date = Utc.with_ymd_and_hms(1989, 10, 25, 0, 0, 0).unwrap();
+    // println!("{:?}", utc_date.timestamp());
     //println!("{:?}", Utc.with_ymd_and_hms(1989, 10, 25).unwrap());
 
     //let now = ;
