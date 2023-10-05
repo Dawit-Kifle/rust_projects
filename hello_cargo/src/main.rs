@@ -47,23 +47,42 @@ fn to_string_(s: &str) -> String {
 
 use ops::Range;
 use core::alloc;
-use std::fmt::format;
+use std::fmt::{Debug, format};
 use std::thread::scope;
 use std::str;
 use std::collections::HashMap;
+use std::time::SystemTime;
+use chrono::{DateTime, Local, NaiveDate, TimeZone, Utc};
 
 fn main() {
 
-    let text = "hello world wonderful world";
+    let birth = "1989-10-25";
 
-    let mut map = HashMap::new();
 
-    for word in text.split_whitespace() {
-        let count = map.entry(word).or_insert(0);
-        *count += 1;
-    }
+    let dt = Local::now();
+    dt.naive_utc();
+    println!("{}", dt.naive_utc());
+    // println!("{:?}", NaiveDate::from_ymd_opt(1989, 10, 25));
+    println!("LOCAL : {:?}", Local::now());
+    println!("UTC : {:?}", Utc::now());
+    let utc_date = Utc.with_ymd_and_hms(1989, 10, 25, 0, 0, 0).unwrap();
+    println!("{:?}", utc_date);
+    //println!("{:?}", Utc.with_ymd_and_hms(1989, 10, 25).unwrap());
 
-    println!("{:?}", map);
+    //let now = ;
+
+    // println!("{:?}", now);
+
+    // let text = "hello world wonderful world";
+    //
+    // let mut map = HashMap::new();
+    //
+    // for word in text.split_whitespace() {
+    //     let count = map.entry(word).or_insert(0);
+    //     *count += 1;
+    // }
+    //
+    // println!("{:?}", map);
     // let mut scores = HashMap::new();
     //
     // scores.insert(String::from("Blue"), 10);
