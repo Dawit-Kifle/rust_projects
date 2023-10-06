@@ -52,38 +52,43 @@ use std::thread::scope;
 use std::str;
 use std::collections::HashMap;
 use std::time::SystemTime;
-use chrono::{Datelike, DateTime, format, Local, NaiveDate, NaiveDateTime, TimeZone, Utc};
+use chrono::{Datelike, DateTime, format, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
+use chrono::format::strftime;
 
 fn main() {
+
+    let t = NaiveTime::parse_from_str("00:01:23", "%H:%M:%S");
+
+
 
 
     // let birthday_string = dict.get_item("user_id__birthday").unwrap().
     // extract::<String>().unwrap();
-    let birthday_string = "19891006";
-
-    let now_datetime = Local::now();
-    let now_date = now_datetime.date_naive();
-    let birth = NaiveDate::parse_from_str(&birthday_string, "%Y%m%d").unwrap();
-
-    println!("birth : {}, now : {}", birth, now_date);
-
-    let mut years = now_date.year() - birth.year();
-
-
-    println!("years : {}", years);
-
-    // if now_date.month() - d.month() == 0 && 1 == 2 {
-    //     println!("same");
+    // let birthday_string = "19891006";
+    //
+    // let now_datetime = Local::now();
+    // let now_date = now_datetime.date_naive();
+    // let birth = NaiveDate::parse_from_str(&birthday_string, "%Y%m%d").unwrap();
+    //
+    // println!("birth : {}, now : {}", birth, now_date);
+    //
+    // let mut years = now_date.year() - birth.year();
+    //
+    //
+    // println!("years : {}", years);
+    //
+    // // if now_date.month() - d.month() == 0 && 1 == 2 {
+    // //     println!("same");
+    // // }
+    //
+    // // println!("{} {}", now_date.day().abs_diff(d.day()));
+    //
+    // if !(now_date.month() >= birth.month() && now_date.day() >= birth.day()) {
+    //     years -= 1;
     // }
-
-    // println!("{} {}", now_date.day().abs_diff(d.day()));
-
-    if !(now_date.month() >= birth.month() && now_date.day() >= birth.day()) {
-        years -= 1;
-    }
-
-    println!("age : {}", years);
-    println!("{} {}", now_date.month(), birth.month());
+    //
+    // println!("age : {}", years);
+    // println!("{} {}", now_date.month(), birth.month());
     // let mut age = now_date.years_since(d.unwrap()).unwrap();
 
 
