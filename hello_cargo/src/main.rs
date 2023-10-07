@@ -53,14 +53,40 @@ use std::str;
 use std::collections::HashMap;
 use std::time::SystemTime;
 use chrono::{Datelike, DateTime, format, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
-use chrono::format::strftime;
+use chrono::format::{strftime, StrftimeItems};
+
+#[derive(Debug)]
+
+struct T {
+    vec: i32
+}
 
 fn main() {
 
-    let t = NaiveTime::parse_from_str("00:01:23", "%H:%M:%S");
+    let tt = T {vec: 1};
+    println!("{:?}", tt.vec);
+
+    let mut time_str = String::from("01:40");
+    let str_struct = time_str.as_ptr();
+
+    let s = String::new();
+    unsafe {
+        s.
+    }
+
+    unsafe {
+        println!("{:?}", str_struct);
+        println!("{:?}", str_struct.offset(3));
 
 
 
+    }
+
+
+
+
+    println!("{:?}", time_str.as_bytes());
+    println!("{:?}", time_str.into_bytes());
 
     // let birthday_string = dict.get_item("user_id__birthday").unwrap().
     // extract::<String>().unwrap();
