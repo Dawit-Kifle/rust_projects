@@ -52,6 +52,7 @@ use core::alloc;
 use ops::Range;
 use std::collections::HashMap;
 use std::fmt::{format, Debug, Write};
+use std::io::Read;
 use std::str;
 use std::thread::scope;
 use std::time::SystemTime;
@@ -64,14 +65,25 @@ struct T {
 
 fn main() {
 
-    let time_str = String::from("01:40");
+    let time_str = String::from("11:40");
 
     let bytes = time_str.as_bytes();
 
-    let minutes= (&bytes[0..2][0]).to_ascii_lowercase();
-    let seconds = &bytes[3..];
+    let minutes = ((bytes[0]-48) as u32 * 600) + ((bytes[1]-48) as u32 * 60);
+    let seconds = (bytes[3]-48) as u32 * 10 + (bytes[4]-48) as u32;
+    // let b = *aa;
+    // let a = (bytes[0].to_usize() - 48) * 600 + (bytes[1].to_usize() - 48) * 60;
 
-    println!("{:?} {:?}", minutes - 48, seconds);
+    // 48 => 0
+
+
+    println!("{} ", minutes + seconds);
+    println!("{:?}", bytes);
+    // let minutes_to_seconds: u32 = ((&bytes[0]-48 * 600) + (&bytes[1] * 60)).into();
+    // println!("{} {}", minutes_to_seconds, bytes[1]);
+    // let seconds = &bytes[3..];
+
+    // println!("{:?} {:?}", (minutes - 48) * 60, 1);
 
 
     // slice는 len과 해당 literal이 가지고 있는 memory address를 buffer로 가지고 있다.
