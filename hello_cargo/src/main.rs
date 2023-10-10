@@ -63,22 +63,48 @@ struct T {
     vec: i32,
 }
 
+
+
+impl UserProfileImage {
+    fn set_default_img() {
+        println!("sdaff" );
+    }
+}
+
+const UserDefaultImg: &'static str = "sdfasdf";
+
+#[derive(Debug)]
+enum UserProfileImage{
+    DefaultImg(&'static str),
+    CustomImg(String),
+    UserDefaultImg = 100,
+}
+
 fn main() {
 
-    let time_str = String::from("11:40");
+    let default = UserProfileImage::DefaultImg;
 
-    let bytes = time_str.as_bytes();
+    let d = UserProfileImage::UserDefaultImg;
 
-    let minutes = ((bytes[0]-48) as u32 * 600) + ((bytes[1]-48) as u32 * 60);
-    let seconds = (bytes[3]-48) as u32 * 10 + (bytes[4]-48) as u32;
-    // let b = *aa;
-    // let a = (bytes[0].to_usize() - 48) * 600 + (bytes[1].to_usize() - 48) * 60;
-
-    // 48 => 0
+    println!("{:?}", d);
 
 
-    println!("{} ", minutes + seconds);
-    println!("{:?}", bytes);
+
+    //
+    // let time_str = String::from("11:40");
+    //
+    // let bytes = time_str.as_bytes();
+    //
+    // let minutes = ((bytes[0]-48) as u32 * 600) + ((bytes[1]-48) as u32 * 60);
+    // let seconds = (bytes[3]-48) as u32 * 10 + (bytes[4]-48) as u32;
+    // // let b = *aa;
+    // // let a = (bytes[0].to_usize() - 48) * 600 + (bytes[1].to_usize() - 48) * 60;
+    //
+    // // 48 => 0
+    //
+    //
+    // println!("{} ", minutes + seconds);
+    // println!("{:?}", bytes);
     // let minutes_to_seconds: u32 = ((&bytes[0]-48 * 600) + (&bytes[1] * 60)).into();
     // println!("{} {}", minutes_to_seconds, bytes[1]);
     // let seconds = &bytes[3..];
