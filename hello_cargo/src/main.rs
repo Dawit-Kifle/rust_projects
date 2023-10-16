@@ -4,7 +4,7 @@
 
 use std::borrow::Borrow;
 use std::ops::{Add, AddAssign, Deref};
-use std::ptr;
+use std::{ptr, thread};
 use std::{io, ops, vec};
 
 const VERSION: &str = "1.0.0";
@@ -57,8 +57,9 @@ use std::process::id;
 use std::rc::Rc;
 
 use std::str;
+use std::sync::mpsc;
 use std::thread::scope;
-use std::time::SystemTime;
+use std::time::{Duration, SystemTime};
 
 // #[derive(Debug)]
 //
@@ -119,12 +120,76 @@ struct St <'a>{
 
 
 
+
+
 fn main() {
 
 
-    let p = ProfileNickname::CustomNickname("용이".to_string());
+    let (tx, rx) = mpsc::channel();
+    // multi producer single consumer
 
-    println!("{:?}", p.to_string());
+    thread::spawn(move || {
+        // move tx into  the closure so the spawned thread owns tx.
+        // The spawned thread needs to own the transmitter to be able to send messges
+        // through the channel.
+
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("thread"),
+        ];
+
+
+        for val in vals {
+            tx.send(val).unwrap();
+            thread::sleep(Duration::from_secs(1));
+        };
+
+    });
+
+    for received in rx {
+        println!("Got : {}", received);
+    }
+
+    // let received = rx.recv().unwrap();
+    //
+    // println!("{:?}", received);
+
+    //
+    // let handle = thread::spawn(|| {
+    //     for i in 1..10 {
+    //         println!("hi number {} from the spawned thread", i);
+    //         thread::sleep(Duration::from_millis(1));
+    //     }}
+    // );
+    //
+    // for i in 1..5 {
+    //     println!("hi number {} from the main thread", i);
+    //     thread::sleep(Duration::from_millis(1));
+    // }
+    //
+    // handle.join().unwrap();
+    // let a = (0..100000);
+
+
+
+    // let result = a.iter().fold(0, |sum, &x| sum + x);
+    // println!("{:?}", result);
+
+
+
+    // let mut iter = a.iter().map(|x| (2*x).to_string());
+    //
+    // println!("{:?}", iter);
+    // println!("{:?}", iter.next());
+    // println!("{:?}", iter.next());
+    // println!("{:?}", iter.next());
+    // println!("{:?}", iter.next());
+
+    // let p = ProfileNickname::CustomNickname("용이".to_string());
+    //
+    // println!("{:?}", p.to_string());
 
 
 //     let mut map: HashMap<i32, St> = HashMap::new();
