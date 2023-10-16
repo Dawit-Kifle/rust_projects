@@ -50,43 +50,237 @@ use chrono::{
 };
 use core::alloc;
 use ops::Range;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::{format, Debug, Write};
 use std::io::Read;
+use std::process::id;
+use std::rc::Rc;
+
 use std::str;
 use std::thread::scope;
 use std::time::SystemTime;
 
+// #[derive(Debug)]
+//
+// struct T {
+//     vec: i32,
+// }
+//
+//
+//
+// impl UserProfileImage {
+//     fn set_default_img() {
+//         println!("sdaff" );
+//     }
+// }
+//
+// const UserDefaultImg: &'static str = "sdfasdf";
+
+// #[derive(Debug)]
+// enum UserProfileImage{
+//     DefaultImg(&'static str),
+//     CustomImg(String),
+//     UserDefaultImg = 100,
+// }
+
 #[derive(Debug)]
-
-struct T {
-    vec: i32,
-}
-
-
-
-impl UserProfileImage {
-    fn set_default_img() {
-        println!("sdaff" );
+    struct ExerciseAggregationDict<'a> {
+        volume: f32,
+        total_workouttime: i32,
+        attendance: Vec<&'a str>,
+        nickname: String,
+        profile_image: &'a str,
+        keypad: &'a str,
     }
-}
 
-const UserDefaultImg: &'static str = "sdfasdf";
 
 #[derive(Debug)]
-enum UserProfileImage{
-    DefaultImg(&'static str),
-    CustomImg(String),
-    UserDefaultImg = 100,
+struct St <'a>{
+    v: Vec<&'a str>,
+    len: i32,
 }
+
+ #[derive(Debug)]
+    enum ProfileNickname {
+        Initializer,
+        NoNickname(String),
+        CustomNickname(String),
+    }
+
+    impl ProfileNickname {
+        fn to_string(self) -> String {
+            match self {
+                Self::Initializer => String::new(),
+                Self::NoNickname(string) => string,
+                Self::CustomNickname(string) => string,
+            }
+        }
+    }
+
+
 
 fn main() {
 
-    let default = UserProfileImage::DefaultImg;
 
-    let d = UserProfileImage::UserDefaultImg;
+    let p = ProfileNickname::CustomNickname("용이".to_string());
 
-    println!("{:?}", d);
+    println!("{:?}", p.to_string());
+
+
+//     let mut map: HashMap<i32, St> = HashMap::new();
+//
+//     let mut a = St { v: Vec::new(), len: 0 };
+//
+//     map.insert(0, a);
+//
+//     println!("{:?}", map);
+//
+//     //let v: &mut St<'_> = map.get(&0).unwrap();
+//     let v = map.get_mut(&0).unwrap();
+//     v.v.push("12");
+//
+//     println!("{:?}", v);
+//
+//     let mut s:HashSet<i32> = HashSet::new();
+//
+//     s.insert(1);
+// s.insert(1);
+//     println!("{:?}", s);
+
+    // println!("{:?}", push("123"));
+
+    // println!("{:?}", a);
+
+    // let mut s = "sadfsf";
+    //
+    // let a = &mut s;
+    //
+    // println!("{} {}", s, a);
+
+
+    // let x = 5;
+    // let mut y = Box::new(x);
+    //
+    // const THING: u32 = 0x1;
+    //
+    // println!("{}", THING);
+    // let foo = 123 + THING;
+    //
+    // println!("{}", foo);
+
+    // const items looks remarkably similar to static items, which introduces some confusion as to which one should be used at which times. To put it simply,
+    // constants are inlined wherever they're used,
+    // making using them identical to simply replacing the name of the const with its value. Static variables, on the other hand, point to a single location in memory,
+    // which all accesses share. This means that, unlike with constants, they can't have destructors, and act as a single value across the entire codebase
+
+
+
+    // *y = 232323;
+    //
+    //
+    // // sy = Box::new(232);
+    //
+    // println!("{}", *y);
+
+    // let mut s = Sstring { buff: 1, len: 2 };
+    //
+    // let a = &mut s;
+    // s.as_str();
+    // s.a();
+    // println!("{:?}", a);
+
+
+    //println!("{:?}", s);
+
+//     fn func() {
+//         let mut data = "hello ".to_string();
+//
+//         let a = data.as_str();
+//
+//         for x in ['k','A','n','g'] {
+//             let val = format!("{}", x); // creating new string
+//             // data.push(val.as_str()); // getting string slice!
+//             println!("{}", val);
+//             data.push(val.as_str());
+//         }
+//
+//         println!("{}", data);
+//   // ...use data somehow...
+//   // ...it's ok to drop all the strings here -- data will no longer be used
+// }
+
+
+    // let mut s = Rc::new("hello".to_string());
+    //
+    // //let ss = Rc::clone(&s);
+    //
+    // println!("{}", Rc::strong_count(&s));
+    //println!("{}", ss);
+
+    // let s = *a + " sadfsdf";
+    // *a
+    // a.push_str(" world");
+    //s = Rc::get_mut(&mut s) + " kang";
+
+
+    // let mut s = "hello".to_string();
+    // let ss = {
+    //     s
+    // };
+    //
+    // ss.as_str();
+    //
+    // s = Rc::new("sadf".to_string());
+    //
+    // println!("{:?}", ss);
+    // println!("{:?}", s);
+    // println!("{}", s + " kang");
+    //
+    // let sparkle_heart = vec![240, 159, 146, 150];
+    //
+    // let s = "💖";
+    // // utf-8 encoding은 Vec<u8>의 2 이상의 bytes가 모여서 만들어진다.
+    // let utf_arr:Vec<u8> = vec![127];
+    //
+    // println!("{:?}", utf_arr);
+    //
+    // println!("{:?}", String::from_utf8(utf_arr));
+
+    // println!("{}", 2 as char);
+    //
+    // for i in [97, 98, 99] {
+    //
+    //     print!("{}", i as u8 as char);
+    // }
+
+    // println!("{:?}", sparkle_heart);
+    // let e1 = ExerciseAggregationDict {
+    //     volume: e.volume,
+    //     total_workouttime: e.total_workouttime,
+    //     attendance: e.attendance,
+    //     nickname: "".to_string(),
+    //     profile_image: "",
+    //     keypad: "",
+    // };
+
+    // println!("{:?}", e);
+    // println!("{:?}", e1);
+
+
+
+
+
+    // let a = "2023-02-01";
+    // let b = "2023-02-01";
+    //
+    //
+    // println!("{}", a==b);
+
+    // let default = UserProfileImage::DefaultImg;
+    //
+    // let d = UserProfileImage::UserDefaultImg;
+    //
+    // println!("{:?}", d);
 
 
 
