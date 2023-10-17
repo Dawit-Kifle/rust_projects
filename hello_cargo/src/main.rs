@@ -44,7 +44,7 @@ fn to_string_(s: &str) -> String {
     String::from(s)
 }
 
-use chrono::format::{strftime, StrftimeItems};
+use chrono::format::{Item, strftime, StrftimeItems};
 use chrono::{
     format, DateTime, Datelike, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc,
 };
@@ -85,72 +85,210 @@ use std::time::{Duration, SystemTime};
 // }
 
 #[derive(Debug)]
-    struct ExerciseAggregationDict<'a> {
-        volume: f32,
-        total_workouttime: i32,
-        attendance: Vec<&'a str>,
-        nickname: String,
-        profile_image: &'a str,
-        keypad: &'a str,
-    }
+struct ExerciseAggregationDict<'a> {
+    volume: f32,
+    total_workouttime: i32,
+    attendance: Vec<&'a str>,
+    nickname: String,
+    profile_image: &'a str,
+    keypad: &'a str,
+}
 
 
 #[derive(Debug)]
-struct St <'a>{
+struct St<'a> {
     v: Vec<&'a str>,
     len: i32,
 }
 
- #[derive(Debug)]
-    enum ProfileNickname {
-        Initializer,
-        NoNickname(String),
-        CustomNickname(String),
-    }
+#[derive(Debug)]
+enum ProfileNickname {
+    Initializer,
+    NoNickname(String),
+    CustomNickname(String),
+}
 
-    impl ProfileNickname {
-        fn to_string(self) -> String {
-            match self {
-                Self::Initializer => String::new(),
-                Self::NoNickname(string) => string,
-                Self::CustomNickname(string) => string,
-            }
+impl ProfileNickname {
+    fn to_string(self) -> String {
+        match self {
+            Self::Initializer => String::new(),
+            Self::NoNickname(string) => string,
+            Self::CustomNickname(string) => string,
         }
     }
+}
+
+
+fn new<T: Default>() -> T {
+    T::default()
+}
+
+fn new_where<T>() -> T
+where T: Default,
+{
+    T::default()
+}
 
 
 
+struct AA {
+    val: f32,
+}
+
+fn select<'short, 'long>(s1: &'short str, s2: &'long str, second: bool) -> &'short str
+where 'long: 'short,
+{
+    if second { s2 } else { s1 }
+}
+
+fn longest<'long, 'short>(x: &'long str, y: &'short str, len: bool) -> &'long str {
+    if len {
+        x
+    }
+    else {
+        x
+    }
+}
+
+fn first_or_default<I>(mut i: I) -> I::Item
+where I: Iterator,
+      I::Item: Default,
+{
+    i.next().unwrap_or_else(I::Item::default)
+}
+
+
+#[derive(Debug)]
+struct Ttt {
+    val: i32,
+}
 
 
 fn main() {
 
+    let v = vec![1,2,3];
 
-    let (tx, rx) = mpsc::channel();
-    // multi producer single consumer
-
-    thread::spawn(move || {
-        // move tx into  the closure so the spawned thread owns tx.
-        // The spawned thread needs to own the transmitter to be able to send messges
-        // through the channel.
-
-        let vals = vec![
-            String::from("hi"),
-            String::from("from"),
-            String::from("the"),
-            String::from("thread"),
-        ];
-
-
-        for val in vals {
-            tx.send(val).unwrap();
-            thread::sleep(Duration::from_secs(1));
-        };
-
+    // However, there's a problem: Rust can't tell how long the spawned thread will run,
+    // so it doesn't know if the reference to v will always be valid.
+    // However, there's a probelm Rust can't tell how long the spawned thread will run,
+    // so it doesn't know if the reference to v will always be valid.
+    let handle = thread::spawn(move || {
+        println!("Here's a vector: {:?}", v)
     });
 
-    for received in rx {
-        println!("Got : {}", received);
+    handle.join().unwrap();
+    // let handler = thread::spawn(|| {
+    //
+    //     for i in 0..10 {
+    //         println!("spawned thread : {}", i as f32 + 0.1);
+    //     }
+    // });
+    // // 중요 join이 어디있는가는 굉장히 중요한 factor이다.
+    // // The main thread is waiting for spawned thread because of join
+    // handler.join().unwrap();
+    //
+    // for i in 11..300 {
+    //     println!("{}", i);
+    // }
+
+
+    //thread::sleep(Duration::from_secs(2));
+
+    // let v = vec![1,2,3];
+    //
+    // println!("{}", first_or_default(v.into_iter()));
+
+    // //let string1 = String::from("long");
+    // let result;
+    //
+    // let string1 = "long";
+    //
+    // {
+    //     let string2 = "short";
+    //     result = longest(string1, string2, true);
+    // }
+    //
+    // //let result = longest(string1.as_str(), string2);
+    // println!("The longest string is {}", result);
+
+
+    // let r;
+    // {
+    //     let x = 5;
+    //     r = x;
+    // }
+    //
+    // println!("{}", r);
+
+
+    //
+    // let outer = String::from("Long living ref");
+    // let longer = &outer;
+    //
+    // {
+    //     let inner = String::from("Short living ref");
+    //     let shorter = &inner;
+    //
+    //     assert_eq!(select(shorter, longer, false), shorter);
+    //     assert_eq!(select(shorter, longer, true), longer);
+    // }
+
+
+    // assert_eq!(0.0, new());
+    // assert_eq!(0.0, new_where());
+
+    // println!("{:?}", new_where());
+
+    // println!("{}", new::<i32>(23));
+
+    // let z = Ttt::default();
+    // println!("{:?}", z.val);
+    //
+    // let x = new::<Ttt>();
+    //
+    // println!("{:?}", x);
+
+    return;
+
+    thread::spawn(|| {
+        for i in 0..10 {
+            println!("thread1 {}", i);
+        }
+    });
+
+
+    for i in 0..1 {
+        println!("main thread {}", i);
     }
+    println!("{}", "start");
+
+
+    // let (tx, rx) = mpsc::channel();
+    // // multi producer single consumer
+    //
+    // thread::spawn(move || {
+    //     // move tx into  the closure so the spawned thread owns tx.
+    //     // The spawned thread needs to own the transmitter to be able to send messges
+    //     // through the channel.
+    //
+    //     let vals = vec![
+    //         String::from("hi"),
+    //         String::from("from"),
+    //         String::from("the"),
+    //         String::from("thread"),
+    //     ];
+    //
+    //
+    //     for val in vals {
+    //         tx.send(val).unwrap();
+    //         thread::sleep(Duration::from_secs(1));
+    //     };
+    //
+    // });
+    //
+    // for received in rx {
+    //     println!("Got : {}", received);
+    // }
 
     // let received = rx.recv().unwrap();
     //
@@ -173,10 +311,8 @@ fn main() {
     // let a = (0..100000);
 
 
-
     // let result = a.iter().fold(0, |sum, &x| sum + x);
     // println!("{:?}", result);
-
 
 
     // let mut iter = a.iter().map(|x| (2*x).to_string());
@@ -237,7 +373,6 @@ fn main() {
     // constants are inlined wherever they're used,
     // making using them identical to simply replacing the name of the const with its value. Static variables, on the other hand, point to a single location in memory,
     // which all accesses share. This means that, unlike with constants, they can't have destructors, and act as a single value across the entire codebase
-
 
 
     // *y = 232323;
@@ -332,9 +467,6 @@ fn main() {
     // println!("{:?}", e1);
 
 
-
-
-
     // let a = "2023-02-01";
     // let b = "2023-02-01";
     //
@@ -346,7 +478,6 @@ fn main() {
     // let d = UserProfileImage::UserDefaultImg;
     //
     // println!("{:?}", d);
-
 
 
     //
@@ -373,9 +504,6 @@ fn main() {
 
     // slice는 len과 해당 literal이 가지고 있는 memory address를 buffer로 가지고 있다.
     // sized한 object이다.
-
-
-
 
 
     //
