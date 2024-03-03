@@ -2,6 +2,8 @@
 
 // mod lib;
 
+extern crate core;
+
 use std::borrow::Borrow;
 use std::ops::{Add, AddAssign, Deref};
 use std::{ptr, thread};
@@ -52,13 +54,13 @@ use core::alloc;
 use ops::Range;
 use std::collections::{HashMap, HashSet};
 use std::fmt::{format, Debug, Write};
+
 use std::io::Read;
 use std::process::id;
 use std::rc::Rc;
 
 use std::str;
-use std::sync::mpsc;
-use std::thread::scope;
+use std::thread::{JoinHandle, scope, sleep, spawn};
 use std::time::{Duration, SystemTime};
 
 // #[derive(Debug)]
@@ -163,20 +165,234 @@ struct Ttt {
     val: i32,
 }
 
+use std::sync::{Arc, mpsc, Mutex};
+
+#[derive(Debug)]
+enum List {
+    Cons(i32, Rc<List>),
+    Nil,
+}
+
+use crate::List::{Cons, Nil};
 
 fn main() {
 
-    let v = vec![1,2,3];
 
-    // However, there's a problem: Rust can't tell how long the spawned thread will run,
-    // so it doesn't know if the reference to v will always be valid.
-    // However, there's a probelm Rust can't tell how long the spawned thread will run,
-    // so it doesn't know if the reference to v will always be valid.
-    let handle = thread::spawn(move || {
-        println!("Here's a vector: {:?}", v)
-    });
 
-    handle.join().unwrap();
+    // Print the final value of the counter
+    println!("Final value of counter: {:?}", *counter.lock().unwrap());
+
+    // The send marker trait indicates that ownership of values of the type implementing Send
+    // can be transferred between threads. Almost every Rust type is Send, but there are some exceptions, including Rc<T>
+    // this cannot be Send because if you cloned an Rc<T> value and tried to transfer ownership of the clone to another thread, both threads might update
+    //
+
+    // The Sync marker trait indicates that it is safe for the type implementing Sync
+    // to be referenced from multiple threads.
+
+    // ownership의 move가 가능하게 만들어 놓은 trait Send는 단!!!!
+    // race condition이 일어나지 않을 primitive type 및 custome type에 대해서 implement 해야 할것이다.
+
+    // 대표적으로 Reference Count는 multi threaded 환경에서 count에 대한 increment가 concurrent 하게 일어날 수 있기 때문에
+    // Rc는 Send marker을 가지지 않는다.
+
+
+
+    // let counter = Arc::new(Mutex::new(0));
+    // // ownership이 move 하기 때문에 Rc
+    // //
+    // let mut handles = vec![];
+    //
+    // for _ in 0..10 {
+    //     let counter = Arc::clone(&counter);
+    //     handles.push(thread::spawn(move || {
+    //         let mut num = counter.lock().unwrap();
+    //         *num += 1;
+    //     }));
+    // }
+    //
+    // for i in handles {
+    //     println!("{:?}", i.join().unwrap());
+    // }
+
+    // You might have noticed that counter is immutable but we could get a mutable reference
+    // to the value inside it; this means Mutex<T> provides interior mutablity as the Cell family does.
+
+
+
+    // let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    //
+    // let b = Cons(3, Rc::clone(&a));
+    // let c = Cons(4, Rc::clone(&a));
+    //
+    // println!("{:?}", Nil);
+
+    // let q = 32;
+    //
+    // let r = Rc::from(q);
+    // let zzz = Rc::new(32);
+    //
+    // assert_eq!(r, zzz);
+
+
+
+
+    // let (tx, rx) = mpsc::channel();
+
+
+    let counter = Rc::new(Mutex::new(0));
+
+    println!("{:?}", counter);
+
+    // let mut num = counter.lock().unwrap();
+    //
+    // for i in 0..10 {
+    //     // thread로 ownership이 transfer된다.
+    //     // 그러면 current thread scope에서 ownership을 가지고 있기 때문에
+    //     // 해당 scope가 끝나고 drop 된다.
+    //
+    //     thread::spawn(move || {
+    //         *num += 1;
+    //     });
+    //
+    // }
+
+
+
+
+    // let mut handles: Vec<JoinHandle<()>> = vec![];
+    //
+    // for _ in 0..10{
+    //
+    //     let handle = thread::spawn( move || {
+    //         num += 1;
+    //
+    //         tx.send();
+    //
+    //     });
+    //
+    //     handles.push(handle);
+    // };
+    //
+    // for h in handles {
+    //     let result = h.join().unwrap();
+    //     println!("{:?}", result);
+    // }
+    //
+    //
+    // // println!(handles);
+    //
+    // println!("{}", num);
+
+    // let counter = Mutex::new(0);
+    // let mut num = counter.lock().unwrap();
+
+
+    // lock result
+    // let num = counter.lock();
+
+    // MutexGuard
+    //let num = num.unwrap();
+
+
+    // let mut handles = vec![];
+    //
+    // for _ in 0..5 {
+    //     handles.push(thread::spawn(move || {
+    //
+    //         let mut num = counter.lock().unwrap();
+    //     }))
+    // }
+
+
+    // main thread가 big river가 되어야 하는건가?
+
+    // let (tx, rx) = mpsc::channel();
+    //let tx2 = tx.clone();
+
+
+    // let handle = thread::spawn(move || {
+    //
+    //     let vals = vec![
+    //         String::from("hi"),
+    //         String::from("from"),
+    //         String::from("the"),
+    //         String::from("thread"),
+    //     ];
+    //
+    //     for val in vals {
+    //         tx.send(val).unwrap();
+    //
+    //         // thread::sleep(Duration::from_secs(1));
+    //     }
+    //
+    //     // let it = vals.iter();
+    //     // println!("{:?}", it);
+    //     // tx.send(1);
+    //
+    // });
+    //
+    // let handle2 = thread::spawn(move || {
+    //     let vals = vec![
+    //         String::from("kwon"),
+    //         String::from("eun"),
+    //         String::from("jin"),
+    //         String::from("love"),
+    //     ];
+    //
+    //     for val in vals {
+    //         tx2.send(val).unwrap();
+    //
+    //     }
+    // });
+    //
+    // handle.join();
+    // handle2.join();
+    //
+    //
+    // // 아주 중요!!!
+    // // recv method는 blocking I/O
+    // // try_recv method는 non-blocking I/O
+    // for received in rx {
+    //     println!("{:?}", received);
+    // }
+
+    // let result = rx.try_recv();
+    // let result = rx.recv();
+    // println!("{:?}", result);
+
+
+
+    // println!("{:?}", val);
+
+    // let v = vec![1,2,3];
+    //
+    // let handle = thread::spawn(move || {
+    //     for i in 0..3 {
+    //         println!("hi number from the spawned thread : {}", v[i]);
+    //
+    //     };
+    // });
+    //
+    // let mut result = handle.join();
+    //
+    // println!("{:?}", result);
+
+
+    // let v = vec![1,2,3];
+    //
+    // let handle = thread::spawn(move || {
+    //     println!("Here's a vector: {:?}", v);
+    // });
+    //
+    // // spawned thread가 언제까지 실행될지 알 수 없는 상황과
+    // // 만약에 main thread에서 먼저 drop시키면 spawned thread는 memory에 대한 참조를 잃어버리고
+    // // 더이상 어떤 코드도 실행할 수 없다.
+    // drop(v);
+    //
+    // handle.join().unwrap();
+
+
     // let handler = thread::spawn(|| {
     //
     //     for i in 0..10 {
