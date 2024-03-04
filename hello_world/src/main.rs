@@ -1,11 +1,4 @@
 
-fn get_names(names: Vec<&'static str>) -> Vec<&'static str> {
-
-  names.iter()
-    .map(|s| s.to_string()) 
-    .collect()
-}
-
 
 fn main() {
   let a = vec![1, 2, 3];
@@ -34,11 +27,15 @@ let _y = x as f32;
 let z = 6.7 as i32;
 println!("{}", z);
 
-let names = vec!["Sam", "Sara"];
-let name_list = get_names(names);
-
 
 }
 
 
 
+fn get_names() -> Vec<String> {
+  let names = vec!["John", "Jane"];
+
+  names.iter()
+    .map(|s| s.to_string()) 
+    .collect()
+}
